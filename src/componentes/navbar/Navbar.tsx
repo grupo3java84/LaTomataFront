@@ -5,21 +5,21 @@ export function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <nav className="bg-red-200 shadow-md w-full relative z-50">
+    <nav className="bg-[var(--color-red)] shadow-md w-full relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
          
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center cursor-pointer">
-            <span className="text-2xl font-bold text-green-600">🍅 LaTomata</span>
+            <span className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"> LaTomata</span>
           </div>
 
           {/* Links e Search (Escondidos no mobile) */}
           <div className="hidden md:flex items-center space-x-6 flex-1 ml-10">
-            <a href="#" className="text-[#1F1615] hover:text-green-600 font-medium">Produtos</a>
-            <a href="#" className="text-[#1F1615] hover:text-green-600 font-medium">Categorias</a>
+            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Produtos</a>
+            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Categorias</a>
            
-            <div className="flex-1 max-w-lg relative ml-4">
+            <div className="flex-1 max-w-lg relative ml-4 ">
               <input
                 type="text"
                 placeholder="Busque por refeições, sucos, etc..."
@@ -31,7 +31,7 @@ export function Navbar() {
 
           {/* Ações: Carrinho e Perfil */}
           <div className="flex items-center space-x-4">
-            <button className="relative p-2 text-[#1F1615] hover:text-green-600">
+            <button className="relative p-2 text-(--color-bg) hover:text-green-600">
               <ShoppingCart size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">
                 2
@@ -39,10 +39,10 @@ export function Navbar() {
             </button>
 
             {/* Menu do Usuário (Dropdown) */}
-            <div className="relative hidden md:block">
+            <div className="relative hidden md:block text-(--color-bg)">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-1 p-2 text-[#1F1615] hover:text-green-600 focus:outline-none"
+                className="flex items-center space-x-1 p-2 text-(--color-bg)hover:text-green-600 focus:outline-none"
               >
                 <User size={24} />
                 <span className="text-sm font-medium">Olá, Igor</span>
