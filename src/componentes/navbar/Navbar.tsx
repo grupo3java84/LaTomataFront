@@ -12,6 +12,7 @@ export function Navbar() {
 
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
+            <img src="./TomatoCut.png" alt="Logo LaTomata" className="h-10 w-10 mr-2" />
             <Link
               to="/"
               className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"
@@ -21,9 +22,8 @@ export function Navbar() {
           </div>
 
           {/* Links e Search (Escondidos no mobile) */}
-          <div className="hidden md:flex items-center space-x-6 flex-1 ml-10">
-            <Link to="#" className="text-(--color-bg) hover:text-green-600 font-medium">Produtos</Link>
-            <Link to="/categorias" className="text-(--color-bg) hover:text-green-600 font-medium">Categorias</Link>
+          <div className="hidden md:flex items-center gap-6 flex-1 ml-10">
+            <Link to="/sobrenos" className="text-(--color-bg) hover:text-green-600 font-medium">Sobre nós</Link>
 
             <div className="flex-1 max-w-lg relative ml-4 ">
               <input
@@ -61,7 +61,6 @@ export function Navbar() {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 border border-gray-100">
                   <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Minha Conta / Configurações</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Endereços Favoritos</a>
                   <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Meus Pedidos</a>
                   <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Cupons e Ofertas</a>
                   <hr className="my-1 border-gray-200" />
