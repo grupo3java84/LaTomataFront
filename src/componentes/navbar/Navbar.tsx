@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ShoppingCart, User, Menu } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -8,22 +9,30 @@ export function Navbar() {
     <nav className="bg-[var(--color-red)] shadow-md w-full relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-         
+
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center cursor-pointer">
-            <span className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"> LaTomata</span>
+          <div className="flex-shrink-0 flex items-center">
+            <Link
+              to="/"
+              className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"
+            >
+              LaTomata
+            </Link>
           </div>
 
           {/* Links e Search (Escondidos no mobile) */}
           <div className="hidden md:flex items-center space-x-6 flex-1 ml-10">
-            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Produtos</a>
-            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Categorias</a>
-           
+            <Link to="#" className="text-(--color-bg) hover:text-green-600 font-medium">Produtos</Link>
+            <Link to="/categorias" className="text-(--color-bg) hover:text-green-600 font-medium">Categorias</Link>
+
             <div className="flex-1 max-w-lg relative ml-4 ">
               <input
                 type="text"
-                placeholder="Busque por refeições, sucos, etc..."
-                className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                placeholder="Busque por categorias..."
+                className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-500 
+             text-(--color-bg) 
+             placeholder:text-(--color-bg)/90 
+             focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
               />
               <Search className="absolute left-3 top-2.5 text-gray-500" size={20} />
             </div>
