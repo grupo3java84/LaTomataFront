@@ -1,104 +1,212 @@
-import { useState, type ChangeEvent } from "react";
+import { useContext, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Produto from "../../../models/Produto";
+import { ClipLoader } from "react-spinners";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { atualizar, buscar, cadastrar } from "../../../services/Service";
+import type Categoria from "../../../models/Categoria";
+import type Produto from "../../../models/Produto";
 
 function FormProduto() {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
 
-  const [produto, setProduto] = useState<Partial<Produto>>({
-    nome: "",
-    descricao: "",
-    preco: 0,
-    foto: "",
-    disponivel: true,
-    saudavel: false,
-  });
+    const navigate = useNavigate();
 
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setProduto({ ...produto, [name]: type === "checkbox" ? checked : value });
-  }
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  return (
-    <div className="container flex flex-col items-center mx-auto my-10 px-4">
-      <h1 className="text-3xl font-bold text-slate-800 my-6">
-        {id ? "Editar" : "Cadastrar"} Produto
-      </h1>
+    const [categorias, setCategorias] = useState<Categoria[]>([])
 
-      <form
-        className="w-full md:w-1/2 flex flex-col gap-4"
-        onSubmit={(e) => { e.preventDefault(); navigate("/produtos"); }}
-      >
-        <input
-          type="text"
-          placeholder="Nome do produto"
-          name="nome"
-          required
-          className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-          value={produto.nome}
-          onChange={atualizarEstado}
-        />
+    const [categoria, setCategoria] = useState<Categoria>({ id: 0, categoria: '', })
+    
+    const [produto, setProduto] = useState<Produto>({} as Produto)
 
-        <textarea
-          placeholder="Descrição"
-          name="descricao"
-          rows={3}
-          className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none resize-none"
-          value={produto.descricao}
-          onChange={atualizarEstado}
-        />
+    const { usuario, handleLogout } = useContext(AuthContext)
+    const token = usuario.token
 
-        <input
-          type="number"
-          placeholder="Preço"
-          name="preco"
-          step="0.01"
-          required
-          className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-          value={produto.preco}
-          onChange={atualizarEstado}
-        />
+    const { id } = useParams<{ id: string }>()
 
-        <input
-          type="text"
-          placeholder="URL da foto"
-          name="foto"
-          className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-          value={produto.foto}
-          onChange={atualizarEstado}
-        />
+    async function buscarProdutoPorId(id: string) {
+        try {
+            await buscar(`/produtos/${id}`, setProduto, {
+                headers: { Authorization: token }
+            })
+        } catch (error: any) {
+            if (error.toString().includes('401')) {
+                handleLogout()
+            }
+        }
+    }
 
-        <label className="flex items-center gap-2 text-slate-700 font-medium">
-          <input
-            type="checkbox"
-            name="disponivel"
-            checked={produto.disponivel}
-            onChange={atualizarEstado}
-          />
-          Disponível
-        </label>
+    async function buscarCategoriaPorId(id: string) {
+        try {
+            await buscar(`/categoria/${id}`, setCategoria, {
+                headers: { Authorization: token }
+            })
+        } catch (error: any) {
+            if (error.toString().includes('401')) {
+                handleLogout()
+            }
+        }
+    }
 
-        <label className="flex items-center gap-2 text-slate-700 font-medium">
-          <input
-            type="checkbox"
-            name="saudavel"
-            checked={produto.saudavel}
-            onChange={atualizarEstado}
-          />
-          Saudável
-        </label>
+    async function buscarCategoria() {
+        try {
+            await buscar('/categorias', setCategoria, {
+                headers: { Authorization: token }
+            })
+        } catch (error: any) {
+            if (error.toString().includes('401')) {
+                handleLogout()
+            }
+        }
+    }
 
-        <button
-          className="rounded-full text-white bg-red-400 hover:bg-red-500 py-3 font-bold transition-all"
-          type="submit"
-        >
-          {id ? "Atualizar" : "Cadastrar"}
-        </button>
-      </form>
-    </div>
-  );
+    useEffect(() => {
+        if (token === '') {
+            alert('Você precisa estar logado');
+            navigate('/');
+        }
+    }, [token])
+
+    useEffect(() => {
+        buscarCategoria()
+
+        if (id !== undefined) {
+            buscarProdutoPorId(id)
+        }
+    }, [id])
+
+    useEffect(() => {
+        setProduto({
+            ...produto,
+            categoria: categoria,
+        })
+    }, [categoria])
+
+    function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
+        setProduto({
+            ...produto,
+            [e.target.name]: e.target.value,
+            categoria: categoria,
+            usuario: usuario,
+        });
+    }
+
+    function retornar() {
+        navigate('/produtos');
+    }
+
+    async function gerarNovoProduto(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        setIsLoading(true)
+
+        if (id !== undefined) {
+            try {
+                await atualizar(`/produtos`, produto, setProduto, {
+                    headers: {
+                        Authorization: token,
+                    },
+                });
+
+                alert('produto atualizada com sucesso')
+
+            } catch (error: any) {
+                if (error.toString().includes('401')) {
+                    handleLogout()
+                } else {
+                    alert('Erro ao atualizar a produto')
+                }
+            }
+
+        } else {
+            try {
+                await cadastrar(`/produtos`, produto, setProduto, {
+                    headers: {
+                        Authorization: token,
+                    },
+                })
+
+                alert('produto cadastrada com sucesso');
+
+            } catch (error: any) {
+                if (error.toString().includes('401')) {
+                    handleLogout()
+                } else {
+                    alert('Erro ao cadastrar a produto');
+                }
+            }
+        }
+
+        setIsLoading(false)
+        retornar()
+    }
+
+    const carregandoCategoria = categoria.categoria === '';
+
+
+    return (
+        <div className="container flex flex-col mx-auto items-center">
+            <h1 className="text-4xl text-center my-8">
+                 {id !== undefined ? 'Editar Produto' : 'Cadastrar Produto'}
+            </h1>
+
+            <form className="flex flex-col w-1/2 gap-4"
+                onSubmit={gerarNovoProduto}>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="titulo">Título da Produto</label>
+                    <input
+                        type="text"
+                        placeholder="Titulo"
+                        name="titulo"
+                        required
+                        className="border-2 border-slate-700 rounded p-2"
+                        value={produto.nome}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="titulo">Descricao do Produto</label>
+                    <input
+                        type="text"
+                        placeholder="Texto"
+                        name="texto"
+                        required
+                        className="border-2 border-slate-700 rounded p-2"
+                         value={produto.descricao}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <p>TCategoria do Produto</p>
+                    <select name="produto" id="tema" className='border p-2 border-slate-800 rounded' 
+                        onChange={(e) => buscarCategoriaPorId(e.currentTarget.value)}
+                    >
+                        <option value="" selected disabled>Selecione uma Categoria</option>
+                        
+                        {categorias.map((categorias) => (
+                            <>
+                                <option value={categoria.id} >{categoria.categoria}</option>
+                            </>
+                        ))}
+
+                    </select>
+                </div>
+                <button 
+                    type='submit' 
+                    className='rounded disabled:bg-slate-200 bg-indigo-400 hover:bg-indigo-800
+                               text-white font-bold w-1/2 mx-auto py-2 flex justify-center'
+                               disabled={carregandoCategoria}
+                >
+                    { isLoading ? 
+                            <ClipLoader 
+                                color="#ffffff" 
+                                size={24}
+                            /> : 
+                           <span>{id === undefined ? 'Cadastrar' : 'Atualizar'}</span>
+                    }
+
+                </button>
+            </form>
+        </div>
+    );
 }
 
 export default FormProduto;

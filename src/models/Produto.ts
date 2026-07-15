@@ -1,5 +1,5 @@
 import type Categoria from "./Categoria";
-import type Usuario from "./Usuario";
+import type UsuarioLogin from "./UsuarioLogin";
 
 export default interface Produto {
     id: number;
@@ -10,5 +10,5 @@ export default interface Produto {
     descricao: string;
     saudavel: boolean;
     categoria: Categoria | null;
-    usuario: Usuario | null;
+    usuario: UsuarioLogin | null;
 }

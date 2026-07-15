@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ModalProduto from '../../componentes/produtos/modalProduto/ModalProduto';
+import ListaProduto from '../../componentes/produtos/listaProdutos/ListaProdutos';
 
 export default function Home(): React.JSX.Element {
   return (
@@ -27,6 +29,7 @@ export default function Home(): React.JSX.Element {
               <Link to="/produtos" className="button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
                 Ver Cardápio
               </Link>
+              
               <Link to="/categorias" className= "button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
                 Ver Categorias
               </Link>
