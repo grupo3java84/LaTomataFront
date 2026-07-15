@@ -1,28 +1,31 @@
-import { Link } from "react-router-dom";
-
-function CardCategoria({ categoria }: any) {
-    return (
-        <div className='flex flex-col rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300 bg-white'>
-            <div className='h-32 bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-2xl'>
-                {categoria.descricao.substring(0, 3).toUpperCase()}
-            </div>
-            
-            <header className='py-6 px-6 bg-white text-slate-800 font-bold text-lg text-center'>
-                {categoria.descricao}
-            </header>
-
-            <div className="flex border-t border-slate-100">
-                <Link to={`/editarcategoria/${categoria.id}`} 
-                    className='w-full text-emerald-600 hover:bg-emerald-50 py-3 text-center font-medium'>
-                    Editar
-                </Link>
-                <div className="w-[1px] bg-slate-100"></div> 
-                <Link to={`/deletarcategoria/${categoria.id}`} 
-                    className='text-red-500 hover:bg-red-50 w-full py-3 text-center font-medium'>
-                    Excluir
-                </Link>
-            </div>
-        </div>
-    )
+import { Link } from 'react-router-dom'
+import type Categoria from '../../../models/Categoria' 
+interface CardCategoriaProps {
+  categoria: Categoria
 }
-export default CardCategoria;
+
+function CardCategoria({ categoria }: CardCategoriaProps) {
+  return (
+    <div className='border flex flex-col rounded-2xl overflow-hidden justify-between'>
+      <header className='py-2 px-6 bg-indigo-800 text-white font-bold text-2xl'>Categoria</header>
+      
+      <p className='p-8 text-3xl bg-slate-200 h-full'>{categoria.descricao}</p>
+
+      <div className="flex">
+        <Link to=''
+          className='w-full text-slate-100 bg-indigo-400 hover:bg-indigo-800
+            flex items-center justify-center py-2'>
+          <button>Editar</button>
+        </Link>
+
+        <Link to='' className='text-slate-100 bg-red-400 hover:bg-red-700 w-full
+          flex items-center justify-center'>
+          <button>Deletar</button>
+        </Link>
+      </div>
+
+    </div>
+  )
+}
+
+export default CardCategoria
