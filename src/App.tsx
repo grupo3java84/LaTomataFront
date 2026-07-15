@@ -27,6 +27,7 @@ export default function App() {
             <Route path="/editarproduto/:id" element={<FormProduto />} />
             <Route path="/deletarproduto/:id" element={<DeletarProduto />} />
             <Route path='/sobrenos' element={<SobreNos />} />
+            
           </Routes>
         </main>
         <Footer />
