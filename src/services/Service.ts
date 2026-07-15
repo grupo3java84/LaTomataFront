@@ -4,6 +4,7 @@ export const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 });
 
+
 export const post = async <T>(url: string, dados: T, setDados: Function, header?: object) => {
     const resposta = await api.post(url, dados, header)
     setDados(resposta.data)
