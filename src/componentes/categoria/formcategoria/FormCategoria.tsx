@@ -1,10 +1,51 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
+import type Categoria from "../../../models/Categoria";
+import { atualizarCategoria, cadastrarCategoria, listarCategorias } from "../../../services/Service";
 
 function FormCategoria() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
-    const [categoria, setCategoria] = useState({ descricao: '' });
+
+    const { usuario, handleLogout } = useContext(AuthContext);
+    const token = usuario.token;
+
+    const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
+
+    async function obterCategoriaPorId(id: string) {
+        try {
+            await listarCategorias((dados: Categoria[]) => {
+                const categoriaEncontrada = dados.find((c) => c.id === Number(id));
+                if (categoriaEncontrada) {
+                    setCategoria(categoriaEncontrada);
+                } else {
+                    alert('Categoria não encontrada!');
+                    retornar();
+                }
+            }, {
+                headers: { Authorization: token }
+            });
+        } catch (error: any) {
+            const status = error.response?.status;
+            if (status === 401 || status === 403) {
+                handleLogout();
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (token === '') {
+            alert('Você precisa estar logado!');
+            navigate('/login');
+        }
+    }, [token]);
+
+    useEffect(() => {
+        if (id !== undefined) {
+            obterCategoriaPorId(id);
+        }
+    }, [id]);
 
     function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
         setCategoria({ 
@@ -13,8 +54,49 @@ function FormCategoria() {
         });
     }
 
-    function processarEnvio(e: React.FormEvent) {
+    async function processarEnvio(e: React.FormEvent) {
         e.preventDefault();
+
+        if (id !== undefined) {
+            try {
+                await atualizarCategoria(categoria, setCategoria, {
+                    headers: { 'Authorization': token }
+                });
+                alert('Categoria atualizada com sucesso!');
+                retornar();
+            } catch (error: any) {
+                const status = error.response?.status;
+                const detalheErro = error.response?.data?.mensagem || error.response?.data?.message || error.message;
+
+                if (status === 401 || status === 403) {
+                    alert('Sessão expirada ou acesso negado. Faça login novamente.');
+                    handleLogout();
+                } else {
+                    alert(`Erro ao atualizar a Categoria: ${detalheErro}`);
+                }
+            }
+        } else {
+            try {
+                await cadastrarCategoria(categoria, setCategoria, {
+                    headers: { 'Authorization': token }
+                });
+                alert('Categoria cadastrada com sucesso!');
+                retornar();
+            } catch (error: any) {
+                const status = error.response?.status;
+                const detalheErro = error.response?.data?.mensagem || error.response?.data?.message || error.message;
+
+                if (status === 401 || status === 403) {
+                    alert('Sessão expirada ou acesso negado. Faça login novamente.');
+                    handleLogout();
+                } else {
+                    alert(`Erro ao cadastrar a Categoria: ${detalheErro}`);
+                }
+            }
+        }
+    }
+
+    function retornar() {
         navigate("/categorias");
     }
 
@@ -35,7 +117,7 @@ function FormCategoria() {
                         name="descricao"
                         id="descricao"
                         className="border-2 border-red-200 rounded-xl p-3 w-full focus:border-red-400 outline-none transition-all"
-                        value={categoria.descricao}
+                        value={categoria.descricao || ''}
                         onChange={atualizarEstado}
                         required
                     />
