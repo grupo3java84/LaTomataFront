@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Home(): React.JSX.Element {
   return (
@@ -23,12 +24,12 @@ export default function Home(): React.JSX.Element {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 pt-4">
-              <button className="button-primary text-white! text-base px-8 py-4 rounded-xl cursor-pointer">
+              <Link to="/produtos" className="button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
                 Ver Cardápio
-              </button>
-              <button className="button-primary text-white! text-base px-8 py-4 rounded-xl cursor-pointer ">
-                Ver Combo
-              </button>
+              </Link>
+              <Link to="/categorias" className= "button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
+                Ver Categorias
+              </Link>
             </div>
           </div>
           <div className="w-full md:w-1/2 flex justify-center">

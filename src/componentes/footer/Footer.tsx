@@ -44,7 +44,7 @@ export function Footer() {
 
           <div className='text-white'>
             <h4 className="text-white font-semibold mb-4">Fique por dentro</h4>
-            <p className="text-sm mb-4">Assine nossa newsletter para dicas de saúde e cupons exclusivos.</p>
+            <p className="text-sm mb-4">Assine nossa newsletter para dicas de refeições saudáveis e cupons exclusivos.</p>
             <div className="flex mb-6">
               <input
                 type="email"

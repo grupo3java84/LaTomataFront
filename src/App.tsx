@@ -4,9 +4,10 @@ import Home from './pages/home/Home.tsx';
 import { Navbar } from './componentes/navbar/Navbar.tsx';
 import { Footer } from './componentes/footer/Footer.tsx';
 import Categorias from './pages/categoria/Categoria.tsx'; 
+import Produtos from './pages/produtos/Produtos.tsx';
 import FormCategoria from './componentes/categoria/formcategoria/FormCategoria.tsx';
+import FormProduto from './componentes/produtos/formProduto/FormProduto.tsx';
 import DeletarCategoria from './componentes/categoria/deletarcategoria/DeletarCategoria.tsx';
-import SobreNos from './pages/sobrenos/SobreNos.tsx';
 
 export default function App() {
   return (
@@ -20,7 +21,6 @@ export default function App() {
             <Route path="/cadastrarcategoria" element={<FormCategoria />} />
             <Route path="/editarcategoria/:id" element={<FormCategoria />} />
             <Route path="/deletarcategoria/:id" element={<DeletarCategoria />} />
-            <Route path="/sobrenos" element={<SobreNos />} />
           </Routes>
         </main>
         <Footer />
