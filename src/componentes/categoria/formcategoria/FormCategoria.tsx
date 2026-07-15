@@ -62,27 +62,32 @@ function FormCategoria() {
         setIsLoading(true);
 
         if (id !== undefined) {
+
             try {
-                await put(`/categorias/atualizar`, categoria, setCategoria, {
-                    headers: { 'Authorization': token } // Voltou a usar o token limpo
+                const dadosAtualizacao = {
+                    id: Number(id), 
+                    descricao: categoria.descricao
+                };
+
+                await post(`/categorias/cadastrar`, dadosAtualizacao, setCategoria, {
+                    headers: { 'Authorization': token }
                 });
                 alert('Categoria atualizada com sucesso!');
             } catch (error: any) {
                 if (error.toString().includes('401')) {
-                    handleLogout()
+                    handleLogout();
                 } else {
-                    alert('Erro ao atualizar a Categoria.');
+                    alert('Erro ao atualizar a Categoria via POST.');
                 }
             }
         } else {
             try {
-                // Mantemos a estratégia de mandar apenas o que o banco precisa para criar
                 const dadosCadastro = {
                     descricao: categoria.descricao
                 };
 
                 await post(`/categorias/cadastrar`, dadosCadastro, setCategoria, {
-                    headers: { 'Authorization': token } // Voltou a usar o token limpo
+                    headers: { 'Authorization': token } 
                 });
                 alert('Categoria cadastrada com sucesso!');
             } catch (error: any) {

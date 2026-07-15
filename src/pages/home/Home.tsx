@@ -27,7 +27,7 @@ export default function Home(): React.JSX.Element {
               <Link to="/produtos" className="button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
                 Ver Cardápio
               </Link>
-              <Link to="/categorias/cadastrar" className= "button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
+              <Link to="/categorias" className= "button-primary text-white! px-6 py-3 rounded-lg font-semibold transition-colors">
                 Ver Categorias
               </Link>
             </div>

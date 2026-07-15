@@ -29,7 +29,7 @@ export default function App() {
                 <Route path="/categorias" element={<Categorias />} />
                 <Route path="/categorias/cadastrar" element={<FormCategoria />} />
                 <Route path="/categorias/atualizar/:id" element={<FormCategoria />} />
-                <Route path="/deletarcategoria/:id" element={<DeletarCategoria />} />
+                <Route path="/categorias/:id" element={<DeletarCategoria />} />
                 <Route path="/produtos" element={<Produtos />} />
                 <Route path="/cadastrarproduto" element={<FormProduto />} />
                 <Route path="/editarproduto/:id" element={<FormProduto />} />
