@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type Categoria from "../../../models/Categoria";
-import listarCategorias from "../../../services/Service";
+import { get } from "../../../services/Service";
 import CardCategoria from "../cardcategoria/CardCategoria";
 
 function ListaCategorias() {
@@ -29,8 +29,9 @@ function ListaCategorias() {
   async function buscarCategorias() {
     try {
       setIsLoading(true);
-      const response = await listarCategorias('categorias');
-      setCategorias(response.data ?? []);
+      await get('/categorias', setCategorias, {
+        headers: { 'Authorization': token }
+      });
     } catch (error: any) {
       if (error.toString().includes('401')) {
         handleLogout();

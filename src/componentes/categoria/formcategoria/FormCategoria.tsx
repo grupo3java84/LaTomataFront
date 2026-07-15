@@ -12,7 +12,11 @@ function FormCategoria() {
     const { usuario, handleLogout } = useContext(AuthContext);
     const token = usuario.token;
 
-    const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
+    const [categoria, setCategoria] = useState<Categoria>({
+        id: 0,
+        descricao: '',
+        produto: null
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     async function buscarPorId(id: string) {
@@ -59,8 +63,8 @@ function FormCategoria() {
 
         if (id !== undefined) {
             try {
-                await put(`/categorias`, categoria, setCategoria, {
-                    headers: { 'Authorization': token }
+                await put(`/categorias/atualizar`, categoria, setCategoria, {
+                    headers: { 'Authorization': token } // Voltou a usar o token limpo
                 });
                 alert('Categoria atualizada com sucesso!');
             } catch (error: any) {
@@ -72,8 +76,13 @@ function FormCategoria() {
             }
         } else {
             try {
-                await post(`/categorias`, categoria, setCategoria, {
-                    headers: { 'Authorization': token }
+                // Mantemos a estratégia de mandar apenas o que o banco precisa para criar
+                const dadosCadastro = {
+                    descricao: categoria.descricao
+                };
+
+                await post(`/categorias/cadastrar`, dadosCadastro, setCategoria, {
+                    headers: { 'Authorization': token } // Voltou a usar o token limpo
                 });
                 alert('Categoria cadastrada com sucesso!');
             } catch (error: any) {
@@ -89,6 +98,9 @@ function FormCategoria() {
         retornar();
     }
 
+
+
+
     return (
         <div className="container flex flex-col items-center justify-center mx-auto my-8 px-4">
             <h1 className="text-4xl text-center my-8 font-bold text-slate-800">
@@ -97,16 +109,17 @@ function FormCategoria() {
 
             <form className="w-full md:w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="nome" className="text-slate-700 font-semibold">
-                        Nome da Categoria
+                    {/* Ajustado de "nome" para "descricao" */}
+                    <label htmlFor="descricao" className="text-slate-700 font-semibold">
+                        Descrição da Categoria
                     </label>
                     <input
                         type="text"
                         placeholder="Descreva aqui sua categoria"
-                        name="nome"
-                        id="nome"
+                        name="descricao" // Alinhado com o seu Model Categoria
+                        id="descricao"
                         className="border-2 border-red-200 rounded-xl p-3 w-full focus:border-red-400 outline-none transition-all"
-                        value={categoria.nome || ''}
+                        value={categoria.descricao} // Vinculado à propriedade correta
                         onChange={atualizarEstado}
                         required
                     />

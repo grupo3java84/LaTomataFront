@@ -17,30 +17,30 @@ import { AuthProvider } from './contexts/AuthContext.tsx';
 export default function App() {
   return (
     <>
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="flex flex-col min-h-screen bg-cream text-dark font-sans">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/cadastro" element={<Cadastro />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/categorias" element={<Categorias />} />
-              <Route path="/cadastrarcategoria" element={<FormCategoria />} />
-              <Route path="/editarcategoria/:id" element={<FormCategoria />} />
-              <Route path="/deletarcategoria/:id" element={<DeletarCategoria />} />
-              <Route path="/produtos" element={<Produtos />} />
-              <Route path="/cadastrarproduto" element={<FormProduto />} />
-              <Route path="/editarproduto/:id" element={<FormProduto />} />
-              <Route path="/deletarproduto/:id" element={<DeletarProduto />} />
-              <Route path='/sobrenos' element={<SobreNos />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="flex flex-col min-h-screen bg-cream text-dark font-sans">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/cadastro" element={<Cadastro />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/categorias" element={<Categorias />} />
+                <Route path="/categorias/cadastrar" element={<FormCategoria />} />
+                <Route path="/categorias/atualizar/:id" element={<FormCategoria />} />
+                <Route path="/deletarcategoria/:id" element={<DeletarCategoria />} />
+                <Route path="/produtos" element={<Produtos />} />
+                <Route path="/cadastrarproduto" element={<FormProduto />} />
+                <Route path="/editarproduto/:id" element={<FormProduto />} />
+                <Route path="/deletarproduto/:id" element={<DeletarProduto />} />
+                <Route path='/sobrenos' element={<SobreNos />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </AuthProvider>
     </>
   );
 }
