@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Produto from "../../../models/Produto";
+import type Produto from "../../../models/Produto";
 
 function FormProduto() {
   const navigate = useNavigate();

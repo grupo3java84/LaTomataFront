@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Produto from "../../../models/Produto";
+import type Produto from "../../../models/Produto";
 
 interface CardProdutoProps {
   produto: Produto;
@@ -22,7 +22,7 @@ function CardProduto({ produto }: CardProdutoProps) {
           <span className="text-green-600 font-bold text-lg">
             R$ {produto.preco.toFixed(2)}
           </span>
-          <span className="text-xs text-slate-400">{produto.categoria?.tipo}</span>
+          <span className="text-xs text-slate-400">{produto.categoria?.descricao}</span>
         </div>
 
         <div className="flex gap-2 flex-wrap mt-1">
