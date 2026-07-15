@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AuthContext } from '../../../contexts/AuthContext'
 import type Categoria from '../../../models/Categoria'
-import { deletarCategoria as deletarCategoriaService } from '../../../services/Service';
+import deletarCategoriaService from '../../../services/Service'
+import buscarCategoria from '../../../services/Service';
 
 function DeletarCategoria() {
 
@@ -18,11 +19,13 @@ const navigate = useNavigate()
 
   async function buscarPorId(id: string) {
     try {
-      await buscarCategoria(`/categorias/${id}`, setCategoria, {
+      const response = await buscarCategoria(`/categorias/${id}`, {
         headers: {
-          'Authorization': token
+          Authorization: token
         }
       })
+
+      setCategoria(response.data)
     } catch (error: any) {
       if (error.toString().includes('401')) {
         handleLogout()

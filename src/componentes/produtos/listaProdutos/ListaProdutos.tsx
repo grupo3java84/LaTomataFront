@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Produto from "../../../models/Produto";
+import type Produto from "../../../models/Produto";
 import CardProduto from "../cardProduto/CardProduto";
 
 const produtosEstaticos: Produto[] = [
