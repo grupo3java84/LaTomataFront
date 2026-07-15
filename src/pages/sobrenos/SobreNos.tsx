@@ -1,5 +1,6 @@
 import { integrantes } from '../../data/membros';
 import { CardIntegrante } from '../../componentes/cardintegrante/CardIntegrante';
+
 export default function SobreNos() {
     return (
         <div className="container mx-auto my-12 px-6">
