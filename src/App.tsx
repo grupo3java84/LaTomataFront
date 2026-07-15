@@ -11,11 +11,13 @@ import DeletarProduto from './componentes/produtos/deletarProduto/DeletarProduto
 import SobreNos from './pages/sobrenos/SobreNos.tsx';
 import Cadastro from './pages/usuario/cadastro/Cadastro.tsx';
 import Login from './pages/usuario/login/Login.tsx';
+import { AuthProvider } from './contexts/AuthContext.tsx';
 
 
 export default function App() {
   return (
     <>
+    <AuthProvider>
       <BrowserRouter>
         <div className="flex flex-col min-h-screen bg-cream text-dark font-sans">
           <Navbar />
@@ -38,6 +40,7 @@ export default function App() {
           <Footer />
         </div>
       </BrowserRouter>
+    </AuthProvider>
     </>
   );
 }
