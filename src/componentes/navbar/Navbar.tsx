@@ -38,26 +38,19 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Ações: Carrinho e Perfil */}
-          <div className="flex items-center space-x-4">
-            <button className="relative p-2 text-(--color-bg) hover:text-green-600">
-              <ShoppingCart size={24} />
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">
-                2
-              </span>
-            </button>
 
-            {/* Menu do Usuário (Dropdown) */}
-            <div className="relative hidden md:block text-(--color-bg)">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-1 p-2 text-(--color-bg)hover:text-green-600 focus:outline-none"
-              >
-                <User size={24} />
-                <span className="text-sm font-medium">Olá, Igor</span>
-              </button>
 
-              {/* Corpo do Dropdown */}
+          {/* Menu Cadastro */}
+          <div className="flex items-center space-x-8">
+            <Link to="/cadastro" className="text-(--color-bg) hover:text-green-600 font-medium">Cadastro</Link>
+
+            {/* Menu Login */}
+            <div className="flex items-center space-x-8">
+              <Link to="/login" className="text-(--color-bg) hover:text-green-600 font-medium">Login</Link>
+
+
+
+              {/* Corpo do Dropdown
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 border border-gray-100">
                   <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Minha Conta / Configurações</a>
@@ -67,16 +60,26 @@ export function Navbar() {
                   <a href="#" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sair</a>
                 </div>
               )}
-            </div>
+            </div> */}
 
-            {/* Botão Mobile */}
-            <div className="md:hidden flex items-center">
-              <button className="text-gray-700 hover:text-green-600 focus:outline-none p-2">
-                <Menu size={24} />
-              </button>
+              {/* Ações: Carrinho e Perfil */}
+              <div className="flex items-center space-x-4">
+                <button className="relative p-2 text-(--color-bg) hover:text-green-600">
+                  <ShoppingCart size={24} />
+                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">
+                    2
+                  </span>
+                </button>
+
+                {/* Botão Mobile */}
+                <div className="md:hidden flex items-center">
+                  <button className="text-gray-700 hover:text-green-600 focus:outline-none p-2">
+                    <Menu size={24} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </nav>
