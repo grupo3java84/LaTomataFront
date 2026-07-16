@@ -23,6 +23,9 @@ function ListaProdutos() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [produtos, setProduto] = useState<Produto[]>(produtosEstaticos);
+
+  const [filtro, setFiltro] = useState<string>("todos");
+
   const { handleLogout } = useContext(AuthContext);
 
   useEffect(() => {
@@ -53,6 +56,14 @@ function ListaProdutos() {
     }
   }
 
+  const produtosFiltrados = produtos.filter((produto) => {
+    if (filtro === "saudaveis") {
+      return produto.saudavel === true;
+    }
+    return true; // Se for "todos", retorna a lista inteira
+  });
+
+
   {/*catch (error: any) {
       if (error.toString().includes('401') || error.response?.status === 401) {
         handleLogout();
@@ -75,21 +86,36 @@ function ListaProdutos() {
       <div className="flex justify-center w-full my-4">
         <div className="container flex flex-col">
 
+          {/* 3. Dropdown de Seleção de Filtro */}
+          <div className="flex justify-end max-w-7xl w-full mx-auto px-4 mt-4">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="filtro-saude" className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Filtrar Opções
+              </label>
+              <select
+                id="filtro-saude"
+                value={filtro}
+                onChange={(e) => setFiltro(e.target.value)}
+                className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer shadow-sm transition-all"
+              >
+                <option value="todos">📋 Todos Produtos</option>
+                <option value="saudaveis">🥗 Saudáveis</option>
+              </select>
+            </div>
+          </div>
 
-          {(produtos.length === 0 && !isLoading) && (
+          {/* 4. Validação baseada na lista filtrada */}
+          {(produtosFiltrados.length === 0 && !isLoading) && (
             <span className="text-3xl text-center my-8 text-slate-500 font-medium">
               Nenhum produto foi encontrado!
             </span>
           )}
-          
 
           <div className="max-w-7xl mx-auto my-12 px-4">
             <div className="flex flex-wrap justify-center gap-8">
-              {produtos.map((produto) => (
-                <CardProduto
-                  key={produto.id}
-                  produto={produto}
-                />
+              {/* 5. Renderização dos produtos já filtrados */}
+              {produtosFiltrados.map((produto) => (
+                <CardProduto key={produto.id} produto={produto} />
               ))}
             </div>
           </div>

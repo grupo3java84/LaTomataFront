@@ -21,7 +21,7 @@ export default function App() {
         <BrowserRouter>
           <div className="flex flex-col min-h-screen bg-cream text-dark font-sans">
             <Navbar />
-            <main className="flex-grow">
+            <main className="grow">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/cadastro" element={<Cadastro />} />
