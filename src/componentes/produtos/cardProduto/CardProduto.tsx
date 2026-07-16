@@ -26,7 +26,7 @@ function CardProduto({ produto, children }: CardProdutoProps) {
 
         <div className="flex justify-between items-center mt-1">
           <span className="text-green-600 font-bold text-lg">
-            R$ {produto.preco.toFixed(2)}
+            R$ {(produto.preco || 0).toFixed(2)}
           </span>
           <span className="text-xs text-slate-400">{produto.categoria?.descricao}</span>
         </div>
@@ -43,14 +43,12 @@ function CardProduto({ produto, children }: CardProdutoProps) {
         </div>
       </div>
  
-      {/* 🔄 LÓGICA ATUALIZADA DOS BOTÕES BASE */}
       {children ? (
-        // Se a tela de exclusão mandou botões customizados (Sim/Não), renderiza eles aqui dentro
         <div className="flex border-t border-slate-100 bg-slate-50">
           {children}
         </div>
       ) : (
-        // Caso contrário, se o usuário estiver logado no catálogo, mostra os botões normais
+
         token !== '' && (
           <div className="flex border-t border-slate-100 bg-slate-50">
             <Link to={`/produtos/atualizar/${produto.id}`} className="w-full text-emerald-600 hover:bg-emerald-100 py-3 text-center font-medium transition-all">

@@ -82,11 +82,6 @@ function ListaProdutos() {
             </span>
           )}
           
-          {/*{(!isLoading && produtos.length === 0) && (
-            <span className="text-3xl text-center my-8">
-              Nenhuma produto foi encontrado!
-            </span>
-          )}*/}
 
           <div className="max-w-7xl mx-auto my-12 px-4">
             <div className="flex flex-wrap justify-center gap-8">

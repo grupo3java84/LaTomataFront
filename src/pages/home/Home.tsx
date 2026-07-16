@@ -34,12 +34,12 @@ export default function Home(): React.JSX.Element {
           </div>
           <div className="w-full md:w-1/2 flex justify-center">
             <div className="relative">
-              <div className="absolute -inset-3 bg-gradient-to-tr from-terracotta to-mustard rounded-3xl opacity-20 blur-sm"></div>
+              <div className="absolute -inset-3 bg-linear-to-tr from-terracotta to-mustard rounded-3xl opacity-20 blur-sm"></div>
 
               <img
                 src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=700"
                 alt="Prato principal LaTomata"
-                className="relative rounded-2xl shadow-2xl object-cover w-full max-w-[450px] border-4 border-cream"
+                className="relative rounded-2xl shadow-2xl object-cover w-full max-w-112.5 border-4 border-cream"
               />
             </div>
           </div>

@@ -9,16 +9,7 @@ import CardProduto from "../cardProduto/CardProduto";
 function DeletarProduto() {
   const navigate = useNavigate()
 
-  const [produto, setProduto] = useState<Partial<Produto>>({
-    nome: "",
-    descricao: "",
-    preco: 0,
-    foto: "",
-    disponivel: true,
-    saudavel: false,
-    categoria: null
-  });
-
+  const [produto, setProduto] = useState<Produto | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { usuario, handleLogout } = useContext(AuthContext)
@@ -26,12 +17,12 @@ function DeletarProduto() {
 
   const { id } = useParams<{ id: string }>()
 
-  async function buscarPorId(id: string) {
+  async function buscarPorId(idString: string) {
     try {
-      await get(`/produtos/${id}`, setProduto, {
-        headers: {
-          Authorization: token
-        }
+      await get(`/produtos/${idString}`, (dados: Produto) => {
+        setProduto(dados);
+      }, {
+        headers: { Authorization: token }
       })
     } catch (error: any) {
       if (error.toString().includes('401') || error.response?.status === 401) {
@@ -85,8 +76,8 @@ function DeletarProduto() {
         Você tem certeza de que deseja apagar o produto abaixo?
       </p>
 
-      {id ? (
-        <CardProduto produto={produto as Produto}>
+      {produto ? (
+        <CardProduto produto={produto}>
           <button
             className="text-slate-700 hover:bg-slate-200 w-full py-3 font-bold transition-all border-r border-slate-100"
             onClick={retornar}
@@ -107,9 +98,11 @@ function DeletarProduto() {
           </button>
         </CardProduto>
       ) : (
-        <div className="py-20 text-slate-400 font-medium">Carregando dados do produto...</div>
+        <div className="py-20 text-slate-400 font-medium flex flex-col items-center gap-2">
+          <ClipLoader color="#EF4444" size={30} />
+          <span>Carregando dados do produto...</span>
+        </div>
       )}
-
     </div>
   );
 }
