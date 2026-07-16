@@ -77,7 +77,7 @@ function FormCategoria() {
                 if (error.toString().includes('401')) {
                     handleLogout();
                 } else {
-                    alert('Erro ao atualizar a Categoria via POST.');
+                    alert('Erro ao atualizar a Categoria.');
                 }
             }
         } else {
@@ -114,17 +114,16 @@ function FormCategoria() {
 
             <form className="w-full md:w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
                 <div className="flex flex-col gap-2">
-                    {/* Ajustado de "nome" para "descricao" */}
                     <label htmlFor="descricao" className="text-slate-700 font-semibold">
                         Descrição da Categoria
                     </label>
                     <input
                         type="text"
                         placeholder="Descreva aqui sua categoria"
-                        name="descricao" // Alinhado com o seu Model Categoria
+                        name="descricao" 
                         id="descricao"
                         className="border-2 border-red-200 rounded-xl p-3 w-full focus:border-red-400 outline-none transition-all"
-                        value={categoria.descricao} // Vinculado à propriedade correta
+                        value={categoria.descricao} 
                         onChange={atualizarEstado}
                         required
                     />

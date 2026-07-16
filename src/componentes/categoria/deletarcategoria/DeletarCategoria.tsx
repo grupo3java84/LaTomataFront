@@ -23,7 +23,6 @@ function DeletarCategoria() {
 
   async function buscarPorId(id: string) {
     try {
-      // 🔄 CORRIGIDO: Agora usa a função get do Service repassando o setCategoria
       await get(`/categorias/${id}`, setCategoria, {
         headers: {
           Authorization: token
@@ -39,7 +38,7 @@ function DeletarCategoria() {
   useEffect(() => {
     if (token === '') {
       alert('Você precisa estar logado')
-      navigate('/')
+      navigate('/login')
     }
   }, [token])
 
@@ -53,7 +52,6 @@ function DeletarCategoria() {
     try {
       setIsLoading(true);
 
-      // 🔄 CORRIGIDO: Agora chama a função utilitária 'deletar' que executa api.delete() de verdade
       await deletar(`/categorias/${id}`, {
         headers: { 'Authorization': token }
       });
@@ -61,7 +59,7 @@ function DeletarCategoria() {
       alert('Categoria excluída com sucesso!');
       retornar();
     } catch (error: any) {
-      alert('Erro ao deletar a Categoria. O servidor pode estar bloqueando o método DELETE.');
+      alert('Erro ao deletar a Categoria.');
     } finally {
       setIsLoading(false);
     }

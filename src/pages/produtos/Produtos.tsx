@@ -11,7 +11,7 @@ function Produtos() {
         
         <div className="flex justify-center mt-6">
           <Link
-            to="/cadastrarproduto"
+            to="/produtos/cadastrar"
             className="bg-[var(--color-red)] hover:bg-red-700 text-white font-bold py-2 px-3 text-sm rounded-full transition-all shadow-lg whitespace-nowrap"
           >
             + Novo

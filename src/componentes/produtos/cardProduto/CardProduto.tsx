@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import type Produto from "../../../models/Produto";
+import { useContext, type ReactNode } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 interface CardProdutoProps {
   produto: Produto;
+  children?: ReactNode; // ➕ Adicione esta propriedade para receber botões de fora
 }
 
-function CardProduto({ produto }: CardProdutoProps) {
+function CardProduto({ produto, children }: CardProdutoProps) {
+  const { usuario } = useContext(AuthContext);
+  const token = usuario.token;
+
   return (
     <div className="flex flex-col rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300 bg-white w-72">
       <img
@@ -36,22 +42,27 @@ function CardProduto({ produto }: CardProdutoProps) {
           </span>
         </div>
       </div>
-
-      <div className="flex border-t border-slate-100">
-        <Link
-          to={`/editarproduto/${produto.id}`}
-          className="w-full text-emerald-600 hover:bg-emerald-50 py-3 text-center font-medium"
-        >
-          Editar
-        </Link>
-        <div className="w-[1px] bg-slate-100"></div>
-        <Link
-          to={`/deletarproduto/${produto.id}`}
-          className="text-red-500 hover:bg-red-50 w-full py-3 text-center font-medium"
-        >
-          Excluir
-        </Link>
-      </div>
+ 
+      {/* 🔄 LÓGICA ATUALIZADA DOS BOTÕES BASE */}
+      {children ? (
+        // Se a tela de exclusão mandou botões customizados (Sim/Não), renderiza eles aqui dentro
+        <div className="flex border-t border-slate-100 bg-slate-50">
+          {children}
+        </div>
+      ) : (
+        // Caso contrário, se o usuário estiver logado no catálogo, mostra os botões normais
+        token !== '' && (
+          <div className="flex border-t border-slate-100 bg-slate-50">
+            <Link to={`/produtos/atualizar/${produto.id}`} className="w-full text-emerald-600 hover:bg-emerald-100 py-3 text-center font-medium transition-all">
+              Editar
+            </Link>
+            <div className="w-px bg-slate-100"></div>
+            <Link to={`/produtos/${produto.id}`} className="text-red-500 hover:bg-red-100 w-full py-3 text-center font-medium transition-all">
+              Excluir
+            </Link>
+          </div>
+        )
+      )}
     </div>
   );
 }

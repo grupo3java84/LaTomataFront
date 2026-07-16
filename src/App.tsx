@@ -31,9 +31,9 @@ export default function App() {
                 <Route path="/categorias/atualizar/:id" element={<FormCategoria />} />
                 <Route path="/categorias/:id" element={<DeletarCategoria />} />
                 <Route path="/produtos" element={<Produtos />} />
-                <Route path="/cadastrarproduto" element={<FormProduto />} />
-                <Route path="/editarproduto/:id" element={<FormProduto />} />
-                <Route path="/deletarproduto/:id" element={<DeletarProduto />} />
+                <Route path="/produtos/cadastrar" element={<FormProduto />} />
+                <Route path="/produtos/atualizar/:id" element={<FormProduto />} />
+                <Route path="/produtos/:id" element={<DeletarProduto />} />
                 <Route path='/sobrenos' element={<SobreNos />} />
               </Routes>
             </main>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: 'https://latomata.onrender.com/' 
+    baseURL: 'https://latomata.onrender.com'
 });
 
 export const post = async <T>(url: string, dados: T, setDados: Function, header?: object) => {
