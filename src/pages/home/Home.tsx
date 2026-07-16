@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Home(): React.JSX.Element {
   return (
-    <div className="bg-[var(--color-bg)]  text-dark min-h-screen font-sans">
+    <div className="bg-(--color-bg) text-dark min-h-screen font-sans">
       <section className="min-h-[80vh] flex items-center px-6 md:px-16 py-12 relative overflow-hidden">
 
         <div className="absolute top-1/4 -right-20 w-96 h-96 bg-terracotta/10 rounded-full blur-3xl pointer-events-none"></div>

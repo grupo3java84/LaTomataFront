@@ -16,15 +16,8 @@ function ListaCategorias() {
   const token = usuario.token;
 
   useEffect(() => {
-    if (token === '') {
-      alert('Você precisa estar logado!');
-      navigate('/');
-    }
-  }, [token]);
-
-  useEffect(() => {
     buscarCategorias();
-  }, [categorias.length]);
+  }, []);
 
   async function buscarCategorias() {
     try {

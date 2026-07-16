@@ -6,16 +6,16 @@ export function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <nav className="bg-[var(--color-red)] shadow-md w-full relative z-50">
+    <nav className="bg-(--color-red) shadow-md w-full relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
 
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
             <img src="./TomatoCut.png" alt="Logo LaTomata" className="h-10 w-10 mr-2" />
             <Link
               to="/"
-              className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"
+              className="text-2xl text-(--color-bg) hover:text-green-600 font-medium"
             >
               LaTomata
             </Link>
