@@ -5,10 +5,8 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import type UsuarioLogin from "../../../models/UsuarioLogin";
 
 function Login() {
-
     const navigate = useNavigate();
-
-    const { usuario, handleLogin, isLoading } = useContext(AuthContext)
+    const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
     const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>({
         id: 0,
@@ -19,88 +17,75 @@ function Login() {
         token: ''
     });
 
-
     useEffect(() => {
         if (usuario.token !== "") {
-            navigate('/') //  Agora vai redirecionar para a sua Home mapeada na raiz
+            navigate('/');
         }
-    }, [usuario])
+    }, [usuario]);
 
     function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
-        setUsuarioLogin({
-            ...usuarioLogin,
-            [e.target.name]: e.target.value
-        })
+        setUsuarioLogin({ ...usuarioLogin, [e.target.name]: e.target.value });
     }
 
     function login(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        handleLogin(usuarioLogin)
+        e.preventDefault();
+        handleLogin(usuarioLogin);
     }
 
     return (
-        <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 h-screen place-items-center font-bold">
-                <form className="flex justify-center items-center flex-col w-1/2 gap-4"
-                    onSubmit={login}>
+        <div className="min-h-screen bg-[#fdfbf7] flex items-center justify-center p-4">
+            <div className="bg-white w-full max-w-sm p-8 rounded-2xl shadow-xl border border-slate-100">
 
-                    <h2 className="text-slate-900 text-5xl">Entrar</h2>
+                <div className="text-center mb-8">
+                    <h2 className="text-4xl font-['Playfair_Display'] font-bold text-[#9e0000]">Bem-vindo</h2>
+                    <p className="text-slate-500 mt-2">Acesse sua conta LaTomata.</p>
+                </div>
 
-                    <div className="flex flex-col w-full">
-                        {/* Corrigido de "usuario" para "email" */}
-                        <label htmlFor="email">Usuário</label>
+                <form className="flex flex-col gap-4" onSubmit={login}>
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-semibold text-slate-700">Email</label>
                         <input
                             type="text"
-                            id="email"
                             name="email"
-                            placeholder="E-mail"
-                            className="border-2 border-slate-700 rounded p-2"
+                            placeholder="exemplo@email.com"
+                            className="border border-slate-300 rounded-lg p-3 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all"
                             value={usuarioLogin.email}
-                            onChange={atualizarEstado} // Simplificado para referenciar a função diretamente
+                            onChange={atualizarEstado}
                         />
                     </div>
 
-                    <div className="flex flex-col w-full">
-                        <label htmlFor="senha">Senha</label>
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-semibold text-slate-700">Senha</label>
                         <input
                             type="password"
-                            id="senha"
                             name="senha"
-                            placeholder="Senha"
-                            className="border-2 border-slate-700 rounded p-2"
+                            placeholder="********"
+                            className="border border-slate-300 rounded-lg p-3 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all"
                             value={usuarioLogin.senha}
-                            onChange={atualizarEstado} // Simplificado
+                            onChange={atualizarEstado}
                         />
                     </div>
 
                     <button
-                        type='submit'
-                        className="rounded bg-indigo-400 flex justify-center
-                               hover:bg-indigo-900 text-white w-1/2 py-2">
-                        {isLoading ?
-                            <ClipLoader
-                                color="#ffffff"
-                                size={24}
-                            /> :
-                            <span>Entrar</span>
-                        }
+                        type="submit"
+                        disabled={isLoading} 
+                        className={`mt-4 w-full py-3 rounded-xl bg-[#9e0000] text-white font-bold transition-all flex justify-center ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#7a0000]"
+                            }`}
+                    >
+                        {isLoading ? <ClipLoader color="#ffffff" size={24} /> : "Entrar"}
                     </button>
 
-                    <hr className="border-slate-800 w-full" />
-
-                    <p>
-                        Ainda não tem uma conta?{' '}
-                        <Link to="/cadastro" className="text-indigo-800 hover:underline">
-                            Cadastre-se
-                        </Link>
-                    </p>
+                    <div className="text-center mt-6">
+                        <p className="text-sm text-slate-600">
+                            Ainda não tem conta?{' '}
+                            <Link to="/cadastro" className="text-[#2d5a27] font-bold hover:underline">
+                                Cadastre-se
+                            </Link>
+                        </p>
+                    </div>
                 </form>
-
-                <div className="bg-[url('https://i.imgur.com/ZZFAmzo.jpg')] lg:block hidden bg-no-repeat 
-                        w-full min-h-screen bg-cover bg-center"
-                ></div>
             </div>
-        </>
+        </div>
     );
 }
 
