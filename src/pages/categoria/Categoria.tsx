@@ -8,7 +8,7 @@ function Categorias() {
       <div className="flex justify-end mb-8">
         <Link 
           to="/categorias/cadastrar" 
-          className="bg-[var(--color-red)] hover:bg-red-700 text-white font-bold py-2 px-3 text-sm rounded-full transition-all shadow-lg whitespace-nowrap"
+          className="bg-(--color-red) hover:bg-red-700 text-white font-bold py-2 px-3 text-sm rounded-full transition-all shadow-lg whitespace-nowrap"
         >
           + Nova Categoria
         </Link>
