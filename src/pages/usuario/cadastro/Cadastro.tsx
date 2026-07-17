@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
-import { AuthContext } from "../../../contexts/AuthContext";
 import type Usuario from "../../../models/Usuario";
 import { cadastrarUsuario } from "../../../services/Service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function Cadastro() {
     const navigate = useNavigate();
-    const { usuario: usuarioGlobal } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [confirmarSenha, setConfirmarSenha] = useState<string>("");
     const [erroSenha, setErroSenha] = useState<string>("");
@@ -25,7 +24,7 @@ function Cadastro() {
 
     useEffect(() => {
         if (usuario.id !== 0) {
-            alert("Usuário cadastrado com sucesso!");
+            ToastAlerta("Usuário cadastrado com sucesso!", 'sucesso');
             navigate('/');
         }
     }, [usuario]);
@@ -62,16 +61,25 @@ function Cadastro() {
         }
 
         if (confirmarSenha !== usuario.senha) {
-            alert("Senhas divergentes! Verifique a confirmação.");
+            alert("Senhas divergentes!");
             return;
         }
 
         setIsLoading(true);
+
+        const usuarioParaEnvio = {
+            nome: usuario.nome,
+            email: usuario.email,
+            senha: usuario.senha,
+            foto: usuario.foto,
+            tipo: usuario.tipo,
+            endereco: usuario.endereco
+        };
+
         try {
-            await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario);
+            await cadastrarUsuario(`/usuarios/cadastrar`, usuarioParaEnvio, setUsuario);
         } catch (error) {
-            console.log(error); // 👈 temporário para debug
-            alert('Erro ao cadastrar o usuário!');
+            ToastAlerta('Erro ao cadastrar. Verifique se o e-mail já está em uso.', 'error');
             setIsLoading(false);
         }
     }

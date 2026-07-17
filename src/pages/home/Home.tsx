@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function Home(): React.JSX.Element {
   return (
     <div className="bg-[#fdfbf7] text-[#3d2b1f] min-h-screen font-sans">
-      <main className="max-w-7xl mx-auto px-6 py-20">
+      <main className="max-w-7xl mx-auto px-8  pb-20">
 
         {/* Seção Hero */}
         <section className="min-h-[60vh] flex flex-col md:flex-row items-center justify-between gap-12 py-16 relative">

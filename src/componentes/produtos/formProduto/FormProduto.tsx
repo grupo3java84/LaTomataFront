@@ -4,6 +4,8 @@ import type Produto from "../../../models/Produto";
 import { get, post } from "../../../services/Service";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type Categoria from "../../../models/Categoria";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { ClipLoader } from "react-spinners";
 
 function FormProduto() {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ function FormProduto() {
   useEffect(() => {
     if (token === '') {
       navigate('/login');
-      alert('Você precisa estar logado para gerenciar os produtos.');
+      ToastAlerta('Você precisa estar logado para gerenciar os produtos.', 'info');
     } else {
       carregarCategorias(); 
     }
@@ -92,16 +94,13 @@ function FormProduto() {
 
   async function gerarNovoProduto(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Formulário enviado! Dados atuais do produto:", produto);
 
     if (!produto.categoria || !produto.categoria.id || produto.categoria.id === 0) {
-      alert("Por favor, selecione uma categoria válida para o produto.");
+      ToastAlerta("Por favor, selecione uma categoria válida para o produto.", "info");
       return;
     }
 
     setIsLoading(true);
-    //const tokenFormatado = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-
 
     const dadosEnvio = {
       id: id !== undefined ? Number(id) : undefined,
@@ -111,23 +110,22 @@ function FormProduto() {
       foto: produto.foto,
       disponivel: produto.disponivel,
       saudavel: produto.saudavel,
-      categoria: {
-        id: produto.categoria.id
-      }
+      categoria: { id: produto.categoria.id }
     };
 
     try {
       await post(`/produtos/cadastrar`, dadosEnvio, setProduto, {
         headers: { 'Authorization': token }
       });
-      alert(id ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!');
+      
+      ToastAlerta(id ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!', 'sucesso');
       retornar();
     } catch (error: any) {
       if (error.toString().includes('401') || error.response?.status === 401) {
-        alert('Sessão expirada! Você será redirecionado para realizar o login novamente.');
+        ToastAlerta('Sessão expirada! Redirecionando para login.', 'erro');
         handleLogout(); 
       } else {
-        alert('Erro ao salvar o Produto. Verifique se os dados estão preenchidos.');
+        ToastAlerta('Erro ao salvar o Produto. Verifique os dados.', 'erro');
       }
     } finally {
       setIsLoading(false);
@@ -135,103 +133,74 @@ function FormProduto() {
   }
 
     return (
-      <div className="container flex flex-col items-center mx-auto my-10 px-4">
-        <h1 className="text-3xl font-bold text-slate-800 my-6">
-          {id ? "Editar" : "Cadastrar"} Produto
-        </h1>
+  <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4">
+    {/* Card do Formulário */}
+    <div className="w-full max-w-lg bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
+      
+      {/* Título (sem a faixa vermelha, estilo limpo) */}
+      <div className="py-8 px-8 text-slate-800 font-black text-2xl uppercase tracking-widest text-center border-b border-slate-100">
+        {id ? 'Editar Produto' : 'Cadastrar Produto'}
+      </div>
 
-        <form className="w-full md:w-1/2 flex flex-col gap-4" onSubmit={gerarNovoProduto}>
-          <input
-            type="text"
-            placeholder="Nome do produto"
-            name="nome"
-            required
-            className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-            value={produto.nome}
-            onChange={atualizarEstado}
-          />
+      {/* Área do Formulário */}
+      <form className="flex flex-col" onSubmit={gerarNovoProduto}>
+        <div className="p-8 flex flex-col gap-6">
+          
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-600 text-sm font-bold">Nome do Produto</label>
+            <input type="text" name="nome" required className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.nome} onChange={atualizarEstado} />
+          </div>
 
-          <textarea
-            placeholder="Descrição"
-            name="descricao"
-            rows={3}
-            className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none resize-none"
-            value={produto.descricao}
-            onChange={atualizarEstado}
-          />
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-600 text-sm font-bold">Descrição</label>
+            <textarea name="descricao" rows={3} className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none resize-none transition-all" value={produto.descricao} onChange={atualizarEstado} />
+          </div>
 
-          <input
-            type="number"
-            placeholder="Preço"
-            name="preco"
-            step="0.01"
-            required
-            className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-            value={produto.preco}
-            onChange={atualizarEstado}
-          />
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-600 text-sm font-bold">Preço (R$)</label>
+            <input type="number" name="preco" step="0.01" required className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.preco} onChange={atualizarEstado} />
+          </div>
 
-          <input
-            type="text"
-            placeholder="URL da foto"
-            name="foto"
-            className="border-2 border-red-200 rounded-xl p-4 w-full focus:border-red-400 outline-none"
-            value={produto.foto}
-            onChange={atualizarEstado}
-          />
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-600 text-sm font-bold">URL da Foto</label>
+            <input type="text" name="foto" className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.foto} onChange={atualizarEstado} />
+          </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="categoria" className="text-slate-700 font-semibold px-1">
-              Selecione a Categoria
-            </label>
-            <select
-              name="categoria"
-              id="categoria"
-              className="border-2 border-red-200 rounded-xl p-4 w-full bg-white focus:border-red-400 outline-none text-slate-700 cursor-pointer"
-              value={produto.categoria?.id || ""}
-              onChange={atualizarEstado}
-            >
-              <option value="" disabled>Escolha uma opção</option>
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-600 text-sm font-bold">Categoria</label>
+            <select name="categoria" className="border-2 border-slate-200 rounded-xl p-3 w-full bg-white focus:border-red-500 outline-none cursor-pointer" value={produto.categoria?.id || ""} onChange={atualizarEstado}>
+              <option value="" disabled>Selecione uma categoria</option>
               {categorias.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.descricao}
-                </option>
+                <option key={cat.id} value={cat.id}>{cat.descricao}</option>
               ))}
             </select>
           </div>
 
-          <label className="flex items-center gap-2 text-slate-700 font-medium cursor-pointer mt-2">
-            <input
-              type="checkbox"
-              name="disponivel"
-              checked={produto.disponivel}
-              onChange={atualizarEstado}
-              className="w-4 h-4 text-red-400 border-gray-300 rounded focus:ring-red-400"
-            />
-            Disponível
-          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 text-slate-600 font-bold text-sm cursor-pointer">
+              <input type="checkbox" name="disponivel" checked={produto.disponivel} onChange={atualizarEstado} className="w-4 h-4 accent-red-500" />
+              Disponível
+            </label>
+            <label className="flex items-center gap-2 text-slate-600 font-bold text-sm cursor-pointer">
+              <input type="checkbox" name="saudavel" checked={produto.saudavel} onChange={atualizarEstado} className="w-4 h-4 accent-red-500" />
+              Saudável
+            </label>
+          </div>
+        </div>
 
-          <label className="flex items-center gap-2 text-slate-700 font-medium cursor-pointer">
-            <input
-              type="checkbox"
-              name="saudavel"
-              checked={produto.saudavel}
-              onChange={atualizarEstado}
-              className="w-4 h-4 text-red-400 border-gray-300 rounded focus:ring-red-400"
-            />
-            Saudável
-          </label>
-
-          <button
-            className="rounded-full text-white bg-red-400 hover:bg-red-500 py-3 font-bold transition-all disabled:opacity-50 mt-4"
-            type="submit"
-            disabled={isLoading}
-          >
-            {id ? "Atualizar" : "Cadastrar"}
+        {/* Rodapé dos botões */}
+        <div className="flex border-t border-slate-100">
+          <button type="button" onClick={retornar} className="w-full py-4 text-slate-500 hover:bg-slate-50 font-bold transition-all border-r border-slate-100">
+            Cancelar
           </button>
-        </form>
-      </div>
-    );
-  }
+          <button type="submit" disabled={isLoading} className="w-full py-4 text-red-600 hover:bg-red-50 font-bold transition-all flex justify-center items-center">
+            {isLoading ? <ClipLoader color="#dc2626" size={20} /> : (id ? 'Atualizar' : 'Cadastrar')}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+}
 
   export default FormProduto;

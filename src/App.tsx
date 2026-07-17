@@ -11,6 +11,7 @@ import DeletarProduto from './componentes/produtos/deletarProduto/DeletarProduto
 import SobreNos from './pages/sobrenos/SobreNos.tsx';
 import Cadastro from './pages/usuario/cadastro/Cadastro.tsx';
 import Login from './pages/usuario/login/Login.tsx';
+import Perfil from './pages/perfil/Perfil.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -38,6 +39,7 @@ export default function App() {
                 <Route path="/produtos/atualizar/:id" element={<FormProduto />} />
                 <Route path="/produtos/:id" element={<DeletarProduto />} />
                 <Route path='/sobrenos' element={<SobreNos />} />
+                <Route path='/perfil' element={<Perfil />} />
               </Routes>
             </main>
             <Footer />

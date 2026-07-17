@@ -5,6 +5,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { deletar, get } from "../../../services/Service";
 import { ClipLoader } from "react-spinners";
 import CardProduto from "../cardProduto/CardProduto";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function DeletarProduto() {
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ function DeletarProduto() {
 
   useEffect(() => {
     if (token === '') {
-      alert('Você precisa estar logado')
+      ToastAlerta('Você precisa estar logado', 'info')
       navigate('/login')
     }
   }, [token])
@@ -52,10 +53,10 @@ function DeletarProduto() {
         headers: { 'Authorization': token }
       });
 
-      alert('Produto excluído com sucesso!');
+      ToastAlerta('Produto excluído com sucesso!', 'sucesso');
       retornar();
     } catch (error: any) {
-      alert('Erro ao deletar o Produto.');
+      ToastAlerta('Erro ao deletar o Produto.', 'error');
     } finally {
       setIsLoading(false);
     }

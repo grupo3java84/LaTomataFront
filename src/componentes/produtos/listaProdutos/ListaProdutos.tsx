@@ -1,126 +1,76 @@
 import { useContext, useEffect, useState } from "react";
 import type Produto from "../../../models/Produto";
 import CardProduto from "../cardProduto/CardProduto";
-import { useNavigate } from "react-router-dom";
 import { get } from "../../../services/Service";
-import { AuthContext } from "../../../contexts/AuthContext";
 import { SyncLoader } from "react-spinners";
-
-const produtosEstaticos: Produto[] = [
-  { id: 9991, nome: "Bruschetta", descricao: "Pão tostado com tomate fresco, manjericão e azeite.", preco: 28.90, disponivel: true, saudavel: false, foto: "./assets/produtos/Image_bruschetta.png", categoria: { id: 1, tipo: "Entradas" } },
-  { id: 9992, nome: "Caprese", descricao: "Salada de tomate, muçarela de búfala e manjericão.", preco: 34.90, disponivel: true, saudavel: true, foto: "./assets/produtos/Image_caprese.png", categoria: { id: 1, tipo: "Entradas" } },
-  { id: 9993, nome: "Pato Confitado", descricao: "Pato confitado com molho de laranja e legumes.", preco: 89.90, disponivel: true, saudavel: false, foto: "./assets/produtos/Image_duck.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9994, nome: "Cordeiro Grelhado", descricao: "Carré de cordeiro grelhado com ervas finas e purê.", preco: 95.90, disponivel: true, saudavel: false, foto: "./assets/produtos/Image_lamb.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9995, nome: "Medalhão", descricao: "Medalhão de filé mignon ao molho de cogumelos.", preco: 79.90, disponivel: true, saudavel: false, foto: "./assets/produtos/Image_medallion.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9996, nome: "Polvo Grelhado", descricao: "Polvo grelhado com azeite, alho e batatas rústicas.", preco: 98.90, disponivel: true, saudavel: true, foto: "./assets/produtos/Image_octopus.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9997, nome: "Massa ao Molho", descricao: "Massa fresca artesanal ao molho de tomate e manjericão.", preco: 52.90, disponivel: true, saudavel: false, foto: "./assets/produtos/Image_pasta.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9998, nome: "Salada Gourmet", descricao: "Mix de folhas, nozes, queijo grana padano e vinagrete.", preco: 38.90, disponivel: true, saudavel: true, foto: "./assets/produtos/Image_salad.png", categoria: { id: 4, tipo: "Saladas" } },
-  { id: 9999, nome: "Salmão Grelhado", descricao: "Filé de salmão grelhado com legumes no vapor e limão.", preco: 72.90, disponivel: true, saudavel: true, foto: "./assets/produtos/Image_salmon.png", categoria: { id: 2, tipo: "Pratos Principais" } },
-  { id: 9990, nome: "Tartare de Atum", descricao: "Atum fresco marinado com gergelim, gengibre e molho shoyu.", preco: 64.90, disponivel: true, saudavel: true, foto: "./assets/produtos/Image_tartare.png", categoria: { id: 1, tipo: "Entradas" } },
-];
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function ListaProdutos() {
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [produtos, setProduto] = useState<Produto[]>(produtosEstaticos);
-
+  const [produtos, setProdutos] = useState<Produto[]>([]);
   const [filtro, setFiltro] = useState<string>("todos");
 
-  const { handleLogout } = useContext(AuthContext);
-
-  useEffect(() => {
-    buscarProdutos();
-  }, [produtosEstaticos]);
-
   async function buscarProdutos() {
-
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
-      let dadosDaAPI: Produto[] = [];
-
-      await get('/produtos', (dados: Produto[]) => {
-        dadosDaAPI = dados;
-      });
-      if (dadosDaAPI && dadosDaAPI.length > 0) {
-        // Cria uma lista unificada contendo os estáticos + os novos da API
-        setProduto([...produtosEstaticos, ...dadosDaAPI]);
-      } else {
-        // Se a API falhar ou estiver vazia, mantém apenas os estáticos
-        setProduto(produtosEstaticos);
-      }
+      await get('/produtos', setProdutos);
     } catch (error: any) {
-      console.log("Mantendo produtos estáticos para visualização. Detalhe técnico:", error.message);
+      ToastAlerta("Erro ao carregar o cardápio. Tente novamente mais tarde.", "erro");
     } finally {
       setIsLoading(false);
     }
   }
 
+  useEffect(() => {
+    buscarProdutos();
+  }, []);
+
   const produtosFiltrados = produtos.filter((produto) => {
-    if (filtro === "saudaveis") {
-      return produto.saudavel === true;
-    }
-    return true; // Se for "todos", retorna a lista inteira
+    if (filtro === "saudaveis") return produto.saudavel === true;
+    return true;
   });
-
-
-  {/*catch (error: any) {
-      if (error.toString().includes('401') || error.response?.status === 401) {
-        handleLogout();
-      } else {
-        console.error("Erro ao carregar o cardápio de produtos:", error);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }*/}
 
   return (
     <>
       {isLoading && (
         <div className="flex justify-center w-full my-8">
-          <SyncLoader color="#312e81" size={32} />
+          <SyncLoader color="#9e0000" size={32} />
         </div>
       )}
 
-      <div className="flex justify-center w-full my-4">
-        <div className="container flex flex-col">
-
-          {/* 3. Dropdown de Seleção de Filtro */}
-          <div className="flex justify-end max-w-7xl w-full mx-auto px-4 mt-4">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="filtro-saude" className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Filtrar Opções
-              </label>
-              <select
-                id="filtro-saude"
-                value={filtro}
-                onChange={(e) => setFiltro(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer shadow-sm transition-all"
+      {!isLoading && (
+        <div className="container mx-auto px-4">
+          {/* Filtro Elegante Centralizado */}
+          <div className="flex justify-center max-w-7xl w-full mx-auto mb-12 px-4 gap-6">
+            {["todos", "saudaveis"].map((tipo) => (
+              <button
+                key={tipo}
+                onClick={() => setFiltro(tipo)}
+                className={`font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 pb-1 border-b-2 
+        ${filtro === tipo
+                    ? "text-[#2d5a27] border-[#2d5a27]"
+                    : "text-[#3d2b1f]/40 border-transparent hover:text-[#3d2b1f]/80"
+                  }`}
               >
-                <option value="todos">📋 Todos Produtos</option>
-                <option value="saudaveis">🥗 Saudáveis</option>
-              </select>
-            </div>
+                {tipo === "todos" ? "Todos os pratos" : "Opções saudáveis"}
+              </button>
+            ))}
           </div>
 
-          {/* 4. Validação baseada na lista filtrada */}
-          {(produtosFiltrados.length === 0 && !isLoading) && (
-            <span className="text-3xl text-center my-8 text-slate-500 font-medium">
-              Nenhum produto foi encontrado!
-            </span>
-          )}
-
-          <div className="max-w-7xl mx-auto my-12 px-4">
-            <div className="flex flex-wrap justify-center gap-8">
-              {/* 5. Renderização dos produtos já filtrados */}
+          {/* Lista ou Mensagem de Vazio */}
+          {produtosFiltrados.length === 0 ? (
+            <div className="text-center my-20">
+              <p className="text-2xl text-slate-500 font-medium">Nenhum produto encontrado!</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-8 mb-12">
               {produtosFiltrados.map((produto) => (
                 <CardProduto key={produto.id} produto={produto} />
               ))}
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      )}
     </>
   );
 }

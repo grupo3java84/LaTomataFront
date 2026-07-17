@@ -5,6 +5,7 @@ import { Pencil, X, Check, Mail, MapPin, ShoppingBag, ShieldCheck, Camera, Packa
 import { AuthContext } from "../../contexts/AuthContext";
 import { get, put } from "../../services/Service";
 import type Usuario from "../../models/Usuario";
+import { ToastAlerta } from "../../utils/ToastAlerta";
 
 type RoleConfig = {
     label: string;
@@ -79,7 +80,7 @@ function Perfil() {
                     { headers: { Authorization: usuarioLogado.token } }
                 );
             } catch {
-                alert("Erro ao carregar perfil.");
+                ToastAlerta("Erro ao carregar perfil.", 'error');
             }
             setIsFetching(false);
         }
@@ -132,12 +133,12 @@ function Perfil() {
                 },
                 { headers: { Authorization: usuarioLogado.token } }
             );
-            alert("Perfil atualizado com sucesso!");
+            ToastAlerta("Perfil atualizado com sucesso!", 'sucesso');
             setEditando(false);
             setAlterarSenha(false);
             setConfirmarSenha("");
         } catch {
-            alert("Erro ao atualizar perfil.");
+            ToastAlerta("Erro ao atualizar perfil.", 'error');
         }
         setIsLoading(false);
     }
@@ -336,11 +337,10 @@ function Perfil() {
                         <button
                             type="button"
                             onClick={() => { setAlterarSenha(!alterarSenha); setConfirmarSenha(""); setErroSenha(""); }}
-                            className={`w-full py-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 ${
-                                alterarSenha
+                            className={`w-full py-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 ${alterarSenha
                                     ? "border-[#9e0000] text-[#9e0000] bg-red-50"
                                     : "border-slate-200 text-slate-500 hover:border-[#9e0000] hover:text-[#9e0000]"
-                            }`}
+                                }`}
                         >
                             <KeyRound size={18} />
                             {alterarSenha ? "Cancelar alteração de senha" : "Alterar senha"}
