@@ -12,7 +12,7 @@ import SobreNos from './pages/sobrenos/SobreNos.tsx';
 import Cadastro from './pages/usuario/cadastro/Cadastro.tsx';
 import Login from './pages/usuario/login/Login.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
-
+import Perfil from './pages/perfil/Perfil.tsx';
 
 export default function App() {
   return (
@@ -26,6 +26,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/cadastro" element={<Cadastro />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/perfil" element={<Perfil />} />
                 <Route path="/categorias" element={<Categorias />} />
                 <Route path="/categorias/cadastrar" element={<FormCategoria />} />
                 <Route path="/categorias/atualizar/:id" element={<FormCategoria />} />
