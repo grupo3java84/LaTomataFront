@@ -23,8 +23,6 @@ function Cadastro() {
         produto: []
     });
 
-    const isAdmin = usuarioGlobal.email === "root@root.com.br";
-
     useEffect(() => {
         if (usuario.id !== 0) {
             alert("Usuário cadastrado com sucesso!");
@@ -33,7 +31,15 @@ function Cadastro() {
     }, [usuario]);
 
     function atualizarEstado(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        setUsuario({ ...usuario, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        if (name === "email") {
+            const tipo = value.endsWith("@latomata.com.br") ? "FUNCIONARIO" : "CLIENTE";
+            setUsuario(prev => ({ ...prev, email: value, tipo }));
+            return;
+        }
+
+        setUsuario(prev => ({ ...prev, [name]: value }));
     }
 
     function handleConfirmarSenha(e: ChangeEvent<HTMLInputElement>) {
@@ -64,6 +70,7 @@ function Cadastro() {
         try {
             await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario);
         } catch (error) {
+            console.log(error); // 👈 temporário para debug
             alert('Erro ao cadastrar o usuário!');
             setIsLoading(false);
         }
@@ -95,18 +102,6 @@ function Cadastro() {
                         <input type="text" name="endereco" className="border border-slate-300 rounded-lg p-3" onChange={atualizarEstado} />
                     </div>
 
-                    {isAdmin && (
-                        <div className="flex flex-col gap-1">
-                            <label className="text-sm font-semibold text-[#2d5a27]">Tipo de Usuário</label>
-                            <select name="tipo" className="border border-[#2d5a27] rounded-lg p-3" onChange={atualizarEstado}>
-                                <option value="CLIENTE">Cliente</option>
-                                <option value="FUNCIONARIO">Funcionário</option>
-                            </select>
-                        </div>
-                    )}
-
-
-
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-semibold text-slate-700">Senha</label>
                         <input
@@ -127,7 +122,6 @@ function Cadastro() {
                             className={`border ${erroSenha ? 'border-red-500' : 'border-slate-300'} rounded-lg p-3`}
                             onChange={handleConfirmarSenha}
                         />
-        
                         {erroSenha && (
                             <span className="text-red-500 text-xs font-medium mt-1">
                                 {erroSenha}
