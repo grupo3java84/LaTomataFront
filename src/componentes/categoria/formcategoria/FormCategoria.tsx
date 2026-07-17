@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type Categoria from "../../../models/Categoria";
 import { get, post } from "../../../services/Service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function FormCategoria() {
     const navigate = useNavigate();
@@ -61,46 +62,30 @@ function FormCategoria() {
         e.preventDefault();
         setIsLoading(true);
 
-        if (id !== undefined) {
-
-            try {
-                const dadosAtualizacao = {
-                    id: Number(id),
-                    descricao: categoria.descricao
-                };
-
+        try {
+            if (id !== undefined) {
+                const dadosAtualizacao = { id: Number(id), descricao: categoria.descricao };
                 await post(`/categorias/cadastrar`, dadosAtualizacao, setCategoria, {
                     headers: { 'Authorization': token }
                 });
-                alert('Categoria atualizada com sucesso!');
-            } catch (error: any) {
-                if (error.toString().includes('401')) {
-                    handleLogout();
-                } else {
-                    alert('Erro ao atualizar a Categoria.');
-                }
-            }
-        } else {
-            try {
-                const dadosCadastro = {
-                    descricao: categoria.descricao
-                };
-
+                ToastAlerta('Categoria atualizada com sucesso!', 'sucesso');
+            } else {
+                const dadosCadastro = { descricao: categoria.descricao };
                 await post(`/categorias/cadastrar`, dadosCadastro, setCategoria, {
                     headers: { 'Authorization': token }
                 });
-                alert('Categoria cadastrada com sucesso!');
-            } catch (error: any) {
-                if (error.toString().includes('401')) {
-                    handleLogout()
-                } else {
-                    alert('Erro ao cadastrar a Categoria.');
-                }
+                ToastAlerta('Categoria cadastrada com sucesso!', 'sucesso');
             }
+            retornar();
+        } catch (error: any) {
+            if (error.toString().includes('401')) {
+                handleLogout();
+            } else {
+                ToastAlerta('Erro ao processar a Categoria.', 'error');
+            }
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
-        retornar();
     }
 
 

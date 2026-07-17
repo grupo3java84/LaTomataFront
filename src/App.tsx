@@ -12,12 +12,15 @@ import SobreNos from './pages/sobrenos/SobreNos.tsx';
 import Cadastro from './pages/usuario/cadastro/Cadastro.tsx';
 import Login from './pages/usuario/login/Login.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 
 export default function App() {
   return (
     <>
       <AuthProvider>
+      <ToastContainer />
         <BrowserRouter>
           <div className="flex flex-col min-h-screen bg-cream text-dark font-sans">
             <Navbar />
