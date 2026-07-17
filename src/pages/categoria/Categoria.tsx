@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 function Categorias() {
   return (
     <div className="container mx-auto my-12 px-4">
-      
+
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-black text-slate-800">Gestão de Categorias</h1>
+        <p className="text-slate-500 mt-2">Adicione, edite ou remova categorias do cardápio</p>
+      </div>
       <div className="flex justify-end mb-8">
         <Link 
           to="/categorias/cadastrar" 
@@ -12,11 +16,6 @@ function Categorias() {
         >
           + Nova Categoria
         </Link>
-      </div>
-
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-black text-slate-800">Gestão de Categorias</h1>
-        <p className="text-slate-500 mt-2">Adicione, edite ou remova categorias do cardápio</p>
       </div>
       
       <ListaCategorias />

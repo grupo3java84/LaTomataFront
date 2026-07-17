@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type Categoria from "../../../models/Categoria";
-import { get, post, put } from "../../../services/Service";
+import { get, post } from "../../../services/Service";
 
 function FormCategoria() {
     const navigate = useNavigate();
@@ -65,7 +65,7 @@ function FormCategoria() {
 
             try {
                 const dadosAtualizacao = {
-                    id: Number(id), 
+                    id: Number(id),
                     descricao: categoria.descricao
                 };
 
@@ -87,7 +87,7 @@ function FormCategoria() {
                 };
 
                 await post(`/categorias/cadastrar`, dadosCadastro, setCategoria, {
-                    headers: { 'Authorization': token } 
+                    headers: { 'Authorization': token }
                 });
                 alert('Categoria cadastrada com sucesso!');
             } catch (error: any) {
@@ -107,37 +107,60 @@ function FormCategoria() {
 
 
     return (
-        <div className="container flex flex-col items-center justify-center mx-auto my-8 px-4">
-            <h1 className="text-4xl text-center my-8 font-bold text-slate-800">
-                {id ? 'Editar' : 'Cadastrar'} Categoria
-            </h1>
+        <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4">
+            {/* Card do Formulário */}
+            <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
 
-            <form className="w-full md:w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
-                <div className="flex flex-col gap-2">
-                    <label htmlFor="descricao" className="text-slate-700 font-semibold">
-                        Descrição da Categoria
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Descreva aqui sua categoria"
-                        name="descricao" 
-                        id="descricao"
-                        className="border-2 border-red-200 rounded-xl p-3 w-full focus:border-red-400 outline-none transition-all"
-                        value={categoria.descricao} 
-                        onChange={atualizarEstado}
-                        required
-                    />
+                {/* Faixa Vermelha de Título */}
+                <div className="bg-[#9e0000] py-4 px-8 text-white font-bold text-lg uppercase tracking-widest text-center">
+                    {id ? 'Editar Categoria' : 'Cadastrar Categoria'}
                 </div>
 
-                <button
-                    type="submit"
-                    className="rounded-full text-white bg-red-400 hover:bg-red-500 py-3 font-bold transition-all w-full md:w-1/2 mx-auto flex justify-center"
-                >
-                    {isLoading ? <ClipLoader color="white" size={16} /> : (id ? 'Atualizar' : 'Cadastrar')}
-                </button>
-            </form>
+                {/* Área do Formulário */}
+                <form className="flex flex-col" onSubmit={gerarNovaCategoria}>
+                    {/* Área de Input com padding */}
+                    <div className="p-8 flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="descricao" className="text-slate-600 text-sm font-bold">
+                                Descrição da Categoria
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Ex: Frutas, Vegetais..."
+                                name="descricao"
+                                id="descricao"
+                                className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-[#9e0000] outline-none transition-all"
+                                value={categoria.descricao}
+                                onChange={atualizarEstado}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    {/* Área de Botões (Rodapé) */}
+                    <div className="flex border-t border-slate-100">
+                        <button
+                            type="button"
+                            className="w-full py-4 text-slate-500 hover:bg-slate-50 font-bold transition-all border-r border-slate-100"
+                            onClick={retornar}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 text-[#9e0000] hover:bg-red-50 font-bold transition-all flex justify-center items-center"
+                        >
+                            {isLoading ? (
+                                <ClipLoader color="#9e0000" size={20} />
+                            ) : (
+                                id ? 'Atualizar' : 'Cadastrar'
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
-
 export default FormCategoria;

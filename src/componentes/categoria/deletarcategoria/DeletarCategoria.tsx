@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AuthContext } from '../../../contexts/AuthContext'
 import type Categoria from '../../../models/Categoria'
-import { get, deletar } from '../../../services/Service'; // 🔄 CORRIGIDO: Importações nomeadas corretas
+import { get, deletar } from '../../../services/Service'; 
 import { ClipLoader } from 'react-spinners';
 
 function DeletarCategoria() {
@@ -70,45 +70,49 @@ function DeletarCategoria() {
   }
 
   return (
-    <div className='container w-full md:w-1/3 mx-auto my-8 px-4'>
-      <h1 className='text-4xl text-center my-4 font-bold text-slate-800'>Deletar categoria</h1>
-      <p className='text-center font-semibold mb-4 text-slate-600'>
-        Você tem certeza de que deseja apagar a categoria a seguir?
-      </p>
+    <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4">
+      {/* Card Principal */}
+      <div className="w-full max-w-sm rounded-3xl shadow-lg border border-slate-100 overflow-hidden bg-white">
 
-      <div className='border flex flex-col rounded-2xl overflow-hidden justify-between shadow-md'>
-        <header className='py-2 px-6 bg-(--color-red) text-white font-bold text-2xl'>
-          Categoria
-        </header>
+        {/* Faixa Vermelha de Título */}
+        <div className="bg-[#9e0000] py-4 px-8 text-white font-bold text-lg uppercase tracking-widest text-center">
+          Excluir Categoria
+        </div>
 
-        <p className='p-8 text-3xl bg-slate-100 h-full text-slate-800 font-medium'>
-          {categoria.descricao || 'Carregando...'}
-        </p>
+        {/* Corpo do Card */}
+        <div className="p-8 flex flex-col items-center gap-4 bg-slate-50">
+          <p className="text-slate-600 text-center text-sm font-semibold">
+            Você tem certeza que deseja excluir esta categoria?
+          </p>
 
-        <div className="flex">
+          <h2 className="text-2xl font-black text-slate-800 text-center py-2">
+            {categoria.descricao || 'Carregando...'}
+          </h2>
+        </div>
+
+        {/* Botões de Ação */}
+        <div className="flex border-t border-slate-100">
           <button
-            className='text-slate-100 bg-amber-600/70 hover:bg-amber-600 w-full py-3 font-bold transition-all'
+            className="w-full py-3 text-slate-600 hover:bg-slate-100 font-bold transition-all border-r border-slate-100"
             onClick={retornar}
             disabled={isLoading}
           >
             Não
           </button>
           <button
-            className='text-slate-100 bg-pink-800 hover:bg-red-600 w-full
-              flex items-center justify-center py-3 font-bold transition-all'
+            className="w-full py-3 text-red-600 hover:bg-red-50 font-bold transition-all flex justify-center items-center"
             onClick={deletarCategoria}
             disabled={isLoading}
           >
             {isLoading ? (
-              <ClipLoader color="#ffffff" size={24} />
+              <ClipLoader color="#9e0000" size={20} />
             ) : (
-              <span>Sim</span>
+              'Sim, excluir'
             )}
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
 export default DeletarCategoria;
