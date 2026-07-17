@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { ShoppingCart, Menu, User, LogOut } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import { ToastAlerta } from '../../utils/ToastAlerta';
 
 export function Navbar() {
   const { usuario, handleLogout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const isLogado = usuario.token !== "";
-  const estaNoPerfil = location.pathname === '/perfil';
 
   function logout() {
     handleLogout();
+    ToastAlerta('O Usuário foi desconectado com sucesso!', 'info')
     navigate('/login');
   }
 
@@ -29,6 +29,7 @@ export function Navbar() {
                 LaTomata
               </span>
             </Link>
+            
           </div>
 
           {/* Links e Ações */}
@@ -48,35 +49,23 @@ export function Navbar() {
                 <Link to="/login" className="bg-white text-[#9e0000] px-5 py-2 rounded-sm font-black uppercase text-xs tracking-widest transition-all transform hover:scale-105 shadow-md">
                   Login
                 </Link>
-                <button className="relative p-2 text-white hover:text-[#fdfbf7] transition-all hover:scale-110 duration-300">
-                  <ShoppingCart size={24} />
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black text-[#9e0000] bg-white rounded-full">2</span>
-                </button>
+
               </>
             ) : (
-              <>
-                <button className="relative p-2 text-white hover:text-[#fdfbf7] transition-all hover:scale-110 duration-300">
-                  <ShoppingCart size={24} />
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black text-[#9e0000] bg-white rounded-full">2</span>
-                </button>
 
+              <> 
                 <div className="flex items-center gap-6 text-white">
-                  <div
-                    onClick={() => navigate('/perfil')}
-                    className="flex flex-col items-center hover:scale-110 transition-transform duration-300 cursor-pointer"
-                  >
+                  <div className="flex flex-col items-center hover:scale-110 transition-transform duration-300 cursor-pointer">
                     <User size={20} />
                     <span className="text-[10px] font-bold mt-1 max-w-[80px] truncate">{usuario.nome}</span>
                   </div>
-                  {!estaNoPerfil && (
-                    <button
-                      onClick={logout}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-300 hover:scale-105 border border-white/20"
-                    >
-                      <LogOut size={18} />
-                      <span className="text-xs font-bold uppercase tracking-wider">Sair</span>
-                    </button>
-                  )}
+                  <button
+                    onClick={logout}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-300 hover:scale-105 border border-white/20"
+                  >
+                    <LogOut size={18} />
+                    <span className="text-xs font-bold uppercase tracking-wider">Sair</span>
+                  </button>
                 </div>
               </>
             )}
