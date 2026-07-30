@@ -1,76 +1,146 @@
-import React, { useState } from 'react';
-import { Search, ShoppingCart, User, Menu } from 'lucide-react';
+import React, { useContext, useState } from 'react';
+import { Menu, User, LogOut, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
+import { ToastAlerta } from '../../utils/ToastAlerta';
 
 export function Navbar() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { usuario, handleLogout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false); 
+
+  const isLogado = usuario.token !== "";
+
+  function logout() {
+    handleLogout();
+    ToastAlerta('O Usuário foi desconectado com sucesso!', 'info');
+    navigate('/login');
+    setIsOpen(false);
+  }
 
   return (
-    <nav className="bg-[var(--color-red)] shadow-md w-full relative z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-[#b33939] border-b-4 border-[#3b7a57] shadow-[0_4px_0_#2b5c40] w-full sticky top-0 z-50">
+      <div className="h-1.5 w-full bg-[repeating-linear-gradient(45deg,#fff,#fff_10px,#b33939_10px,#b33939_20px)] opacity-40"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-         
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center cursor-pointer">
-            <span className="text-2xl font-bold text-(--color-bg) hover:text-green-600 font-medium"> LaTomata</span>
-          </div>
 
-          {/* Links e Search (Escondidos no mobile) */}
-          <div className="hidden md:flex items-center space-x-6 flex-1 ml-10">
-            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Produtos</a>
-            <a href="#" className="text-(--color-bg) hover:text-green-600 font-medium">Categorias</a>
-           
-            <div className="flex-1 max-w-lg relative ml-4 ">
-              <input
-                type="text"
-                placeholder="Busque por refeições, sucos, etc..."
-                className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center gap-3 group">
+              <img 
+                src="./TomatoCut.png" 
+                alt="Logo LaTomata" 
+                className="w-10 h-10 [image-rendering:pixelated] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" 
               />
-              <Search className="absolute left-3 top-2.5 text-gray-500" size={20} />
-            </div>
-          </div>
-
-          {/* Ações: Carrinho e Perfil */}
-          <div className="flex items-center space-x-4">
-            <button className="relative p-2 text-(--color-bg) hover:text-green-600">
-              <ShoppingCart size={24} />
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">
-                2
+              <span className="text-2xl font-black font-mono text-[#fffdf9] tracking-tighter drop-shadow-[2px_2px_0px_#2b5c40] group-hover:text-[#ffeaa7] transition-colors">
+                LaTomata
               </span>
-            </button>
-
-            {/* Menu do Usuário (Dropdown) */}
-            <div className="relative hidden md:block text-(--color-bg)">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-1 p-2 text-(--color-bg)hover:text-green-600 focus:outline-none"
-              >
-                <User size={24} />
-                <span className="text-sm font-medium">Olá, Igor</span>
-              </button>
-
-              {/* Corpo do Dropdown */}
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 border border-gray-100">
-                  <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Minha Conta / Configurações</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Endereços Favoritos</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Meus Pedidos</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-[#1F1615] hover:bg-green-50">Cupons e Ofertas</a>
-                  <hr className="my-1 border-gray-200" />
-                  <a href="#" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sair</a>
-                </div>
-              )}
-            </div>
-
-            {/* Botão Mobile */}
-            <div className="md:hidden flex items-center">
-              <button className="text-gray-700 hover:text-green-600 focus:outline-none p-2">
-                <Menu size={24} />
-              </button>
-            </div>
+            </Link>
           </div>
 
+          <div className="hidden md:flex items-center gap-8">
+            <Link to="/categorias" className="inline-block text-white font-bold hover:text-[#ffeaa7] transition-all hover:-translate-y-0.5 uppercase text-xs tracking-widest font-mono">
+              Categorias
+            </Link>
+            <Link to="/produtos" className="inline-block text-white font-bold hover:text-[#ffeaa7] transition-all hover:-translate-y-0.5 uppercase text-xs tracking-widest font-mono">
+              Produtos
+            </Link>
+
+            {!isLogado ? (
+              <>
+                <Link to="/cadastro" className="inline-block text-white font-bold hover:text-[#ffeaa7] transition-all hover:-translate-y-0.5 uppercase text-xs tracking-widest font-mono">
+                  Cadastro
+                </Link>
+                <Link to="/login" className="bg-[#fffdf9] text-[#b33939] border-2 border-[#2b5c40] px-5 py-2 font-black uppercase text-xs tracking-widest transition-all transform hover:-translate-y-1 shadow-[2px_2px_0px_#2b5c40] active:translate-x-0.5 active:translate-y-0.5 font-mono">
+                  Login
+                </Link>
+              </>
+            ) : (
+              <div className="flex items-center gap-4 text-white">
+                <Link to="/perfil" className="flex flex-col items-center hover:scale-105 transition-transform duration-300 group">
+                  <User size={20} className="text-[#ffeaa7] group-hover:drop-shadow-[0_0_2px_#fff]" />
+                  <span className="text-[10px] font-bold mt-0.5 max-w-[80px] truncate font-mono bg-[#2b5c40]/60 px-1.5 py-0.5 border border-white/20">
+                    {usuario.nome}
+                  </span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#2b5c40] hover:bg-[#1e4430] text-white transition-all duration-200 border-2 border-white/30 shadow-[2px_2px_0px_#000]"
+                >
+                  <LogOut size={16} />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono">Sair</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="md:hidden text-white p-2 bg-[#2b5c40] border-2 border-white/30 shadow-[2px_2px_0px_#000]"
+            aria-label="Abrir menu"
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </div>
+
+      {isOpen && (
+        <div className="md:hidden bg-[#9c2e2e] border-t-2 border-[#3b7a57] px-6 py-6 space-y-4 shadow-xl">
+          <div className="flex flex-col space-y-4">
+            <Link 
+              to="/categorias" 
+              onClick={() => setIsOpen(false)}
+              className="text-white font-bold uppercase text-xs tracking-widest font-mono hover:text-[#ffeaa7]"
+            >
+              Categorias
+            </Link>
+            <Link 
+              to="/produtos" 
+              onClick={() => setIsOpen(false)}
+              className="text-white font-bold uppercase text-xs tracking-widest font-mono hover:text-[#ffeaa7]"
+            >
+              Produtos
+            </Link>
+
+            {!isLogado ? (
+              <div className="flex flex-col space-y-3 pt-2 border-t border-white/20">
+                <Link 
+                  to="/cadastro" 
+                  onClick={() => setIsOpen(false)}
+                  className="text-white font-bold uppercase text-xs tracking-widest font-mono hover:text-[#ffeaa7]"
+                >
+                  Cadastro
+                </Link>
+                <Link 
+                  to="/login" 
+                  onClick={() => setIsOpen(false)}
+                  className="bg-[#fffdf9] text-[#b33939] border-2 border-[#2b5c40] px-5 py-2.5 font-black uppercase text-xs tracking-widest text-center shadow-[2px_2px_0px_#2b5c40] font-mono"
+                >
+                  Login
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col space-y-3 pt-2 border-t border-white/20">
+                <Link 
+                  to="/perfil" 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 text-white font-bold font-mono"
+                >
+                  <User size={18} className="text-[#ffeaa7]" />
+                  <span className="text-xs">{usuario.nome}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center justify-center gap-2 w-full py-2 bg-[#2b5c40] text-white border-2 border-white/30 shadow-[2px_2px_0px_#000] font-mono text-xs font-bold uppercase"
+                >
+                  <LogOut size={16} />
+                  <span>Sair</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
