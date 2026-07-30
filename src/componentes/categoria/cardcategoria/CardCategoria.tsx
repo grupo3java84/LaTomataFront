@@ -14,39 +14,35 @@ function CardCategoria({ categoria }: CardCategoriaProps) {
   const qtdProdutos = categoria.produto?.length || 0;
 
   return (
-    <div className="flex flex-col rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300 bg-white w-72">
+    <div className="flex flex-col rounded-none overflow-hidden border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] bg-white w-72 font-mono text-[#4a3b32]">
       
-      {/* Faixa Vermelha de Título */}
-      <div className="bg-[#9e0000] py-3 px-6 text-white font-bold text-sm uppercase tracking-widest">
+      <div className="bg-[#b33939] py-3 px-6 text-white font-black text-xs uppercase tracking-widest border-b-4 border-[#2b5c40]">
         Categoria
       </div>
 
-      {/* Conteúdo: Descrição e Contagem */}
-      <div className="p-8 flex flex-col gap-4 flex-1 bg-slate-50">
-        <h2 className="text-2xl font-black text-slate-800 leading-tight">
+      <div className="p-6 flex flex-col gap-4 flex-1 bg-[#fffdf9]">
+        <h2 className="text-xl font-black text-[#2b5c40] tracking-tight">
           {categoria.descricao}
         </h2>
 
         <div className="inline-flex items-center">
-          <span className="text-xs font-bold bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full">
+          <span className="text-[10px] font-black bg-[#f4ebe1] border border-[#2b5c40] text-[#4a3b32] px-2.5 py-1 uppercase tracking-wider">
             {qtdProdutos} {qtdProdutos === 1 ? 'produto associado' : 'produtos associados'}
           </span>
         </div>
       </div>
 
-      {/* Botões de Ação */}
       {token !== '' && (
-        <div className="flex border-t border-slate-100 bg-slate-50">
+        <div className="flex border-t-4 border-[#2b5c40] bg-[#fffdf9]">
           <Link 
             to={`/categorias/atualizar/${categoria.id}`}
-            className="w-full text-emerald-600 hover:bg-emerald-100 py-3 text-center font-medium transition-all"
+            className="w-full text-[#3b7a57] hover:bg-[#3b7a57] hover:text-white py-3 text-center font-black text-xs uppercase tracking-widest transition-all border-r-4 border-[#2b5c40]"
           >
             Editar
           </Link>
-          <div className="w-px bg-slate-100"></div>
           <Link 
             to={`/categorias/${categoria.id}`}
-            className="text-red-500 hover:bg-red-100 w-full py-3 text-center font-medium transition-all"
+            className="text-[#b33939] hover:bg-[#b33939] hover:text-white w-full py-3 text-center font-black text-xs uppercase tracking-widest transition-all"
           >
             Excluir
           </Link>

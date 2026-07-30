@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
 import { Pencil, X, Check, Mail, MapPin, ShoppingBag, ShieldCheck, Camera, Package, KeyRound } from "lucide-react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { get, put } from "../../services/Service";
 import type Usuario from "../../models/Usuario";
 import { ToastAlerta } from "../../utils/ToastAlerta";
+import CarregandoPixel from "../../componentes/loader/CarregandoPixel"; 
 
 type RoleConfig = {
     label: string;
@@ -19,17 +19,17 @@ type RoleConfig = {
 const ROLE_CONFIG: Record<string, RoleConfig> = {
     CLIENTE: {
         label: "Cliente",
-        badgeClasses: "text-[#2d5a27] bg-green-50 border-[#2d5a27]",
-        ringColor: "#2d5a27",
-        accentText: "text-[#2d5a27]",
+        badgeClasses: "text-[#2b5c40] bg-[#3b7a57]/10 border-[#2b5c40]",
+        ringColor: "#2b5c40",
+        accentText: "text-[#2b5c40]",
         icon: ShoppingBag,
         contexto: "Cliente LaTomata",
     },
     FUNCIONARIO: {
         label: "Funcionário",
-        badgeClasses: "text-[#8a6d1f] bg-amber-50 border-[#c9a227]",
-        ringColor: "#c9a227",
-        accentText: "text-[#8a6d1f]",
+        badgeClasses: "text-[#b33939] bg-[#b33939]/10 border-[#b33939]",
+        ringColor: "#b33939",
+        accentText: "text-[#b33939]",
         icon: ShieldCheck,
         contexto: "Equipe LaTomata",
     },
@@ -145,8 +145,9 @@ function Perfil() {
 
     if (isFetching) {
         return (
-            <div className="min-h-screen bg-[#fdfbf7] flex items-center justify-center">
-                <ClipLoader color="#9e0000" size={40} />
+            <div className="min-h-screen bg-[#fffdf9] flex items-center justify-center font-mono">
+                {/* 2. Substituído o ClipLoader pelo CarregandoPixel no carregamento inicial */}
+                <CarregandoPixel />
             </div>
         );
     }
@@ -158,19 +159,22 @@ function Perfil() {
     const totalProdutos = produtos.length;
 
     return (
-        <div className="min-h-screen bg-[#fdfbf7] py-12 px-4">
+        <div className="min-h-screen bg-[#fffdf9] text-[#4a3b32] py-12 px-4 font-mono selection:bg-[#b33939] selection:text-white relative overflow-hidden">
+            
+            <div className="absolute top-0 left-0 w-full h-3 bg-[repeating-linear-gradient(45deg,#3b7a57,#3b7a57_15px,#fff_15px,#fff_30px)] opacity-20"></div>
+
             <div className="max-w-4xl mx-auto">
 
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 px-1">
+                <p className="text-xs font-black text-[#4a3b32]/60 uppercase tracking-[0.2em] mb-4 px-1">
                     Minha Conta / Perfil
                 </p>
 
-                <div className="relative rounded-3xl overflow-hidden shadow-xl bg-white">
+                <div className="relative rounded-none overflow-hidden border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] bg-white">
                     <div
-                        className="h-56 bg-gradient-to-r from-[#9e0000] to-[#c0392b] relative"
+                        className="h-56 bg-[#b33939] relative border-b-4 border-[#2b5c40]"
                         style={{
                             backgroundImage:
-                                "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06) 0%, transparent 40%), linear-gradient(120deg, #9e0000 0%, #c0392b 100%)",
+                                "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 40%), repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 10px, transparent 10px, transparent 20px)",
                         }}
                     />
 
@@ -179,16 +183,15 @@ function Perfil() {
                             <img
                                 src={usuario.foto}
                                 alt={usuario.nome}
-                                className="w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"
-                                style={{ boxShadow: `0 0 0 5px ${role.ringColor}` }}
+                                className="w-36 h-36 rounded-none object-cover border-4 border-[#fffdf9] shadow-[4px_4px_0px_#2b5c40] [image-rendering:pixelated]"
+                                style={{ boxShadow: `4px 4px 0px #2b5c40` }}
                                 onError={() => setFotoError(true)}
                             />
                         ) : (
                             <div
-                                className="w-36 h-36 rounded-full bg-[#7a0000] border-4 border-white shadow-lg flex items-center justify-center"
-                                style={{ boxShadow: `0 0 0 5px ${role.ringColor}` }}
+                                className="w-36 h-36 rounded-none bg-[#2b5c40] border-4 border-[#fffdf9] shadow-[4px_4px_0px_#2b5c40] flex items-center justify-center"
                             >
-                                <span className="text-white text-5xl font-bold">
+                                <span className="text-[#fffdf9] text-5xl font-black">
                                     {usuario.nome?.charAt(0).toUpperCase()}
                                 </span>
                             </div>
@@ -198,7 +201,7 @@ function Perfil() {
                             <button
                                 onClick={() => setEditando(true)}
                                 title="Alterar foto"
-                                className="absolute bottom-1 right-1 w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#9e0000] hover:border-[#9e0000] transition-all opacity-0 group-hover:opacity-100"
+                                className="absolute bottom-1 right-1 w-10 h-10 rounded-none bg-[#fffdf9] shadow-[2px_2px_0px_#2b5c40] border-2 border-[#2b5c40] flex items-center justify-center text-[#4a3b32] hover:text-[#b33939] hover:border-[#b33939] transition-all opacity-0 group-hover:opacity-100"
                             >
                                 <Camera size={18} />
                             </button>
@@ -206,93 +209,93 @@ function Perfil() {
                     </div>
 
                     <div className="pt-28 pb-10 text-center">
-                        <h1 className="text-3xl font-['Playfair_Display'] font-bold text-slate-800">{usuario.nome}</h1>
+                        <h1 className="text-3xl font-black text-[#2b5c40] tracking-tight">{usuario.nome}</h1>
                         <div className="flex items-center justify-center gap-1.5 mt-3">
                             <span
-                                className={`inline-flex items-center gap-1.5 text-sm font-semibold rounded-full px-4 py-1.5 border ${role.badgeClasses}`}
+                                className={`inline-flex items-center gap-1.5 text-xs font-black rounded-none px-4 py-1.5 border-2 ${role.badgeClasses} shadow-[2px_2px_0px_#2b5c40] uppercase tracking-wider`}
                             >
                                 <RoleIcon size={14} />
                                 {role.label}
                             </span>
                         </div>
-                        <p className={`text-sm font-semibold mt-2 ${role.accentText}`}>{role.contexto}</p>
+                        <p className={`text-xs font-black mt-2 uppercase tracking-wide ${role.accentText}`}>{role.contexto}</p>
                     </div>
                 </div>
 
                 {!editando ? (
                     <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                        <div className="bg-white rounded-3xl shadow-md hover:shadow-lg p-8 border border-slate-100 transition-shadow">
-                            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Informações Pessoais</h2>
+                        <div className="bg-white rounded-none border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] p-8 transition-transform">
+                            <h2 className="text-xs font-black text-[#2b5c40] uppercase tracking-widest mb-6 border-b-2 border-dashed border-[#d8c5b2] pb-2">Informações Pessoais</h2>
                             <div className="flex flex-col gap-6">
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                                        <Mail size={20} className="text-[#9e0000]" />
+                                    <div className="w-12 h-12 rounded-none bg-[#3b7a57]/10 border-2 border-[#3b7a57] flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#3b7a57]">
+                                        <Mail size={20} className="text-[#3b7a57]" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-slate-400 font-semibold">Email</p>
-                                        <p className="text-base text-slate-700 font-medium">{usuario.email}</p>
+                                        <p className="text-[10px] text-[#4a3b32]/60 font-black uppercase tracking-wider">Email</p>
+                                        <p className="text-sm text-[#4a3b32] font-bold">{usuario.email}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                                        <MapPin size={20} className="text-[#9e0000]" />
+                                    <div className="w-12 h-12 rounded-none bg-[#3b7a57]/10 border-2 border-[#3b7a57] flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#3b7a57]">
+                                        <MapPin size={20} className="text-[#3b7a57]" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-slate-400 font-semibold">
+                                        <p className="text-[10px] text-[#4a3b32]/60 font-black uppercase tracking-wider">
                                             {usuario.tipo === "CLIENTE" ? "Endereço de entrega" : "Endereço"}
                                         </p>
-                                        <p className="text-base text-slate-700 font-medium">{usuario.endereco || "—"}</p>
+                                        <p className="text-sm text-[#4a3b32] font-bold">{usuario.endereco || "—"}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl shadow-md hover:shadow-lg p-8 border border-slate-100 flex flex-col gap-4 justify-center transition-shadow">
-                            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Conta</h2>
+                        <div className="bg-white rounded-none border-4 border-[#b33939] shadow-[6px_6px_0px_#b33939] p-8 flex flex-col gap-4 justify-center transition-transform">
+                            <h2 className="text-xs font-black text-[#b33939] uppercase tracking-widest mb-2 border-b-2 border-dashed border-[#d8c5b2] pb-2">Conta</h2>
                             <button
                                 onClick={() => setEditando(true)}
-                                className="w-full py-4 rounded-xl border-2 border-[#9e0000] text-[#9e0000] hover:bg-[#9e0000] hover:text-white font-bold transition-all flex items-center justify-center gap-2"
+                                className="w-full py-4 rounded-none border-2 border-[#2b5c40] bg-[#fffdf9] text-[#2b5c40] hover:bg-[#2b5c40] hover:text-white font-black uppercase text-xs tracking-widest transition-all shadow-[3px_3px_0px_#2b5c40] active:translate-x-0.5 active:translate-y-0.5 flex items-center justify-center gap-2"
                             >
                                 <Pencil size={18} />
                                 Editar perfil
                             </button>
                             <button
                                 onClick={() => { handleLogout(); navigate("/login"); }}
-                                className="w-full py-4 rounded-xl border-2 border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition-all"
+                                className="w-full py-4 rounded-none border-2 border-[#b33939] bg-[#b33939] text-white hover:bg-[#9c2e2e] font-black uppercase text-xs tracking-widest transition-all shadow-[3px_3px_0px_#2b5c40] active:translate-x-0.5 active:translate-y-0.5"
                             >
                                 Sair da conta
                             </button>
                         </div>
 
                         {usuario.tipo === "FUNCIONARIO" && totalProdutos > 0 && (
-                            <div className="md:col-span-2 bg-white rounded-3xl shadow-md hover:shadow-lg p-8 border border-slate-100 transition-shadow">
-                                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
+                            <div className="md:col-span-2 bg-white rounded-none border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] p-8 transition-transform">
+                                <h2 className="text-xs font-black text-[#2b5c40] uppercase tracking-widest mb-6 border-b-2 border-dashed border-[#d8c5b2] pb-2">
                                     Meus Produtos Cadastrados
                                 </h2>
-                                <div className="flex gap-5 overflow-x-auto pb-1">
+                                <div className="flex gap-5 overflow-x-auto pb-2">
                                     {produtos.map((p) => (
                                         <div key={p.id} className="shrink-0 w-32 text-center">
-                                            <div className="relative w-32 h-32 rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+                                            <div className="relative w-32 h-32 rounded-none overflow-hidden bg-[#f4ebe1] border-2 border-[#2b5c40] shadow-[3px_3px_0px_#2b5c40]">
                                                 {p.foto ? (
                                                     <img
                                                         src={p.foto}
                                                         alt={p.nome}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover [image-rendering:pixelated]"
                                                         onError={(e) => { (e.target as HTMLImageElement).style.visibility = "hidden"; }}
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center">
-                                                        <Package size={24} className="text-slate-300" />
+                                                        <Package size={24} className="text-[#4a3b32]/40" />
                                                     </div>
                                                 )}
                                                 {!p.disponivel && (
-                                                    <span className="absolute inset-x-0 bottom-0 bg-slate-800/70 text-white text-[10px] font-semibold py-1 text-center">
+                                                    <span className="absolute inset-x-0 bottom-0 bg-[#b33939] text-white text-[9px] font-black py-1 text-center uppercase tracking-wider">
                                                         Indisponível
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-xs font-semibold text-slate-600 mt-2 truncate" title={p.nome}>
+                                            <p className="text-xs font-black text-[#4a3b32] mt-2 truncate" title={p.nome}>
                                                 {p.nome}
                                             </p>
                                         </div>
@@ -303,44 +306,44 @@ function Perfil() {
                     </div>
 
                 ) : (
-                    <div className="mt-8 bg-white rounded-3xl shadow-md p-8 border border-slate-100">
-                        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">Editar Perfil</h2>
+                    <div className="mt-8 bg-white rounded-none border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] p-8">
+                        <h2 className="text-xs font-black text-[#2b5c40] uppercase tracking-widest mb-8 border-b-2 border-dashed border-[#d8c5b2] pb-2">Editar Perfil</h2>
 
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Dados pessoais</p>
+                        <p className="text-xs font-black text-[#b33939] uppercase tracking-widest mb-4">Dados pessoais</p>
                         <div className="flex flex-col gap-5">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Nome</label>
+                                <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Nome</label>
                                 <input type="text" name="nome" value={usuario.nome} onChange={atualizarEstado}
-                                    className="border border-slate-300 rounded-xl p-3.5 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all" />
+                                    className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" />
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Email</label>
+                                <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Email</label>
                                 <input type="email" name="email" value={usuario.email} onChange={atualizarEstado}
-                                    className="border border-slate-300 rounded-xl p-3.5 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all" />
+                                    className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" />
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Foto (URL)</label>
+                                <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Foto (URL)</label>
                                 <input type="text" name="foto" value={usuario.foto} onChange={atualizarEstado}
-                                    className="border border-slate-300 rounded-xl p-3.5 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all" />
+                                    className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" />
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">
                                     {usuario.tipo === "CLIENTE" ? "Endereço de entrega" : "Endereço"}
                                 </label>
                                 <input type="text" name="endereco" value={usuario.endereco} onChange={atualizarEstado}
-                                    className="border border-slate-300 rounded-xl p-3.5 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all" />
+                                    className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" />
                             </div>
                         </div>
 
-                        <div className="border-t border-slate-100 my-8" />
+                        <div className="border-t-2 border-dashed border-[#d8c5b2] my-8" />
 
                         <button
                             type="button"
                             onClick={() => { setAlterarSenha(!alterarSenha); setConfirmarSenha(""); setErroSenha(""); }}
-                            className={`w-full py-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 ${alterarSenha
-                                    ? "border-[#9e0000] text-[#9e0000] bg-red-50"
-                                    : "border-slate-200 text-slate-500 hover:border-[#9e0000] hover:text-[#9e0000]"
-                                }`}
+                            className={`w-full py-4 rounded-none border-2 font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-2 shadow-[3px_3px_0px_#2b5c40] ${alterarSenha
+                                ? "border-[#b33939] text-[#b33939] bg-[#b33939]/10"
+                                : "border-[#2b5c40] text-[#2b5c40] bg-[#fffdf9] hover:bg-[#2b5c40] hover:text-white"
+                            }`}
                         >
                             <KeyRound size={18} />
                             {alterarSenha ? "Cancelar alteração de senha" : "Alterar senha"}
@@ -349,27 +352,36 @@ function Perfil() {
                         {alterarSenha && (
                             <div className="flex flex-col gap-5 mt-6">
                                 <div className="flex flex-col gap-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Nova Senha</label>
+                                    <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Nova Senha</label>
                                     <input type="password" name="senha" placeholder="••••••••" onChange={atualizarEstado}
-                                        className="border border-slate-300 rounded-xl p-3.5 focus:border-[#9e0000] focus:ring-1 focus:ring-[#9e0000] outline-none transition-all" />
+                                        className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" />
                                 </div>
                                 <div className="flex flex-col gap-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Confirmar Nova Senha</label>
+                                    <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Confirmar Nova Senha</label>
                                     <input type="password" placeholder="••••••••" value={confirmarSenha} onChange={handleConfirmarSenha}
-                                        className={`border ${erroSenha ? 'border-red-500' : 'border-slate-300'} rounded-xl p-3.5 outline-none transition-all`} />
-                                    {erroSenha && <span className="text-red-500 text-xs font-medium mt-1">{erroSenha}</span>}
+                                        className={`border-2 ${erroSenha ? 'border-[#b33939]' : 'border-[#2b5c40]'} bg-[#fffdf9] rounded-none p-3.5 outline-none font-bold text-xs`} />
+                                    {erroSenha && <span className="text-[#b33939] text-xs font-black mt-1 uppercase">{erroSenha}</span>}
                                 </div>
                             </div>
                         )}
 
-                        <div className="flex gap-3 mt-8">
+                        <div className="flex gap-4 mt-8">
                             <button onClick={cancelarEdicao}
-                                className="w-1/2 py-4 rounded-xl border-2 border-slate-200 hover:bg-slate-50 font-bold transition-all flex items-center justify-center gap-2">
+                                className="w-1/2 py-4 rounded-none border-2 border-[#4a3b32] bg-[#f4ebe1] hover:bg-[#eae0d2] text-[#4a3b32] font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-2 shadow-[3px_3px_0px_#4a3b32]">
                                 <X size={18} /> Cancelar
                             </button>
                             <button onClick={salvarPerfil} disabled={isLoading}
-                                className="w-1/2 py-4 rounded-xl bg-[#9e0000] hover:bg-[#7a0000] text-white font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-70">
-                                {isLoading ? <ClipLoader color="#ffffff" size={20} /> : <><Check size={18} /> Salvar</>}
+                                className="w-1/2 py-4 rounded-none border-2 border-[#2b5c40] bg-[#b33939] hover:bg-[#9c2e2e] text-white font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-2 shadow-[3px_3px_0px_#2b5c40] disabled:opacity-70">
+                                {/* Substituído o ClipLoader do botão de salvamento por uma versão compacta ou texto alternativo */}
+                                {isLoading ? (
+                                    <img
+                                        src="./TomatoCut.png"
+                                        alt="Salvando..."
+                                        className="w-5 h-5 [image-rendering:pixelated] animate-spin [animation-duration:2s]"
+                                    />
+                                ) : (
+                                    <><Check size={18} /> Salvar</>
+                                )}
                             </button>
                         </div>
                     </div>

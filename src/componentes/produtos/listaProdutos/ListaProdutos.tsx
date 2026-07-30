@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type Produto from "../../../models/Produto";
 import CardProduto from "../cardProduto/CardProduto";
 import { get } from "../../../services/Service";
-import { SyncLoader } from "react-spinners";
 import { ToastAlerta } from "../../../utils/ToastAlerta";
+import CarregandoPixel from "../../loader/CarregandoPixel";
 
 function ListaProdutos() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,7 +15,7 @@ function ListaProdutos() {
     try {
       await get('/produtos', setProdutos);
     } catch (error: any) {
-      ToastAlerta("Erro ao carregar o cardápio. Tente novamente mais tarde.", "erro");
+      ToastAlerta("Erro ao carregar o cardápio. Tente novamente mais tarde.", "error");
     } finally {
       setIsLoading(false);
     }
@@ -32,24 +32,19 @@ function ListaProdutos() {
 
   return (
     <>
-      {isLoading && (
-        <div className="flex justify-center w-full my-8">
-          <SyncLoader color="#9e0000" size={32} />
-        </div>
-      )}
+      {isLoading && <CarregandoPixel />}
 
       {!isLoading && (
-        <div className="container mx-auto px-4">
-          {/* Filtro Elegante Centralizado */}
-          <div className="flex justify-center max-w-7xl w-full mx-auto mb-12 px-4 gap-6">
+        <div className="container mx-auto px-4 font-mono">
+          <div className="flex justify-center max-w-7xl w-full mx-auto mb-10 px-4 gap-6">
             {["todos", "saudaveis"].map((tipo) => (
               <button
                 key={tipo}
                 onClick={() => setFiltro(tipo)}
-                className={`font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 pb-1 border-b-2 
-        ${filtro === tipo
-                    ? "text-[#2d5a27] border-[#2d5a27]"
-                    : "text-[#3d2b1f]/40 border-transparent hover:text-[#3d2b1f]/80"
+                className={`font-black uppercase tracking-[0.15em] text-xs transition-all duration-200 pb-2 border-b-4 
+                ${filtro === tipo
+                    ? "text-[#2b5c40] border-[#2b5c40] bg-[#f4ebe1] px-4"
+                    : "text-[#4a3b32]/50 border-transparent hover:text-[#4a3b32]/80 px-4"
                   }`}
               >
                 {tipo === "todos" ? "Todos os pratos" : "Opções saudáveis"}
@@ -57,10 +52,9 @@ function ListaProdutos() {
             ))}
           </div>
 
-          {/* Lista ou Mensagem de Vazio */}
           {produtosFiltrados.length === 0 ? (
             <div className="text-center my-20">
-              <p className="text-2xl text-slate-500 font-medium">Nenhum produto encontrado!</p>
+              <p className="text-lg text-[#4a3b32]/70 font-black uppercase tracking-wider">Nenhum produto encontrado!</p>
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-8 mb-12">

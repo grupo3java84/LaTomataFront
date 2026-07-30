@@ -30,9 +30,7 @@ function FormProduto() {
 
   async function carregarCategorias() {
     try {
-      await get("/categorias", setCategorias
-        , {headers: { 'Authorization': token }}
-      );
+      await get("/categorias", setCategorias, { headers: { 'Authorization': token } });
     } catch (error: any) {
       console.error("Erro ao carregar categorias para o formulário", error);
     }
@@ -44,10 +42,10 @@ function FormProduto() {
         headers: {
           'Authorization': token
         }
-      })
+      });
     } catch (error: any) {
       if (error.toString().includes('401')) {
-        handleLogout()
+        handleLogout();
       }
     }
   }
@@ -61,14 +59,11 @@ function FormProduto() {
     }
   }, [token]);
 
-
-
   useEffect(() => {
     if (id !== undefined) {
       buscarPorId(id);
     }
   }, [id]);
-
 
   function retornar() {
     navigate("/produtos");
@@ -122,85 +117,81 @@ function FormProduto() {
       retornar();
     } catch (error: any) {
       if (error.toString().includes('401') || error.response?.status === 401) {
-        ToastAlerta('Sessão expirada! Redirecionando para login.', 'erro');
+        ToastAlerta('Sessão expirada! Redirecionando para login.', 'error');
         handleLogout(); 
       } else {
-        ToastAlerta('Erro ao salvar o Produto. Verifique os dados.', 'erro');
+        ToastAlerta('Erro ao salvar o Produto. Verifique os dados.', 'error');
       }
     } finally {
       setIsLoading(false);
     }
   }
 
-    return (
-  <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4">
-    {/* Card do Formulário */}
-    <div className="w-full max-w-lg bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
-      
-      {/* Título (sem a faixa vermelha, estilo limpo) */}
-      <div className="py-8 px-8 text-slate-800 font-black text-2xl uppercase tracking-widest text-center border-b border-slate-100">
-        {id ? 'Editar Produto' : 'Cadastrar Produto'}
+  return (
+    <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4 font-mono text-[#4a3b32]">
+      <div className="w-full max-w-lg bg-white rounded-none border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] overflow-hidden">
+        
+        <div className="py-6 px-8 text-[#2b5c40] font-black text-2xl uppercase tracking-tight text-center border-b-4 border-[#2b5c40] bg-[#fffdf9]">
+          {id ? 'Editar Produto' : 'Cadastrar Produto'}
+        </div>
+
+        <form className="flex flex-col" onSubmit={gerarNovoProduto}>
+          <div className="p-8 flex flex-col gap-5">
+            
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Nome do Produto</label>
+              <input type="text" name="nome" required className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" value={produto.nome} onChange={atualizarEstado} />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Descrição</label>
+              <textarea name="descricao" rows={3} className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs resize-none" value={produto.descricao} onChange={atualizarEstado} />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Preço (R$)</label>
+              <input type="number" name="preco" step="0.01" required className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" value={produto.preco} onChange={atualizarEstado} />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">URL da Foto</label>
+              <input type="text" name="foto" className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 focus:outline-none focus:ring-2 focus:ring-[#b33939] font-bold text-xs" value={produto.foto} onChange={atualizarEstado} />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-black text-[#4a3b32]/70 uppercase tracking-widest">Categoria</label>
+              <select name="categoria" className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 font-bold text-xs focus:outline-none focus:ring-2 focus:ring-[#b33939] cursor-pointer" value={produto.categoria?.id || ""} onChange={atualizarEstado}>
+                <option value="" disabled>Selecione uma categoria</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.descricao}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-6 mt-2">
+              <label className="flex items-center gap-2 text-xs font-black uppercase tracking-wider cursor-pointer">
+                <input type="checkbox" name="disponivel" checked={produto.disponivel} onChange={atualizarEstado} className="w-4 h-4 accent-[#3b7a57] rounded-none border-2 border-[#2b5c40]" />
+                Disponível
+              </label>
+              <label className="flex items-center gap-2 text-xs font-black uppercase tracking-wider cursor-pointer">
+                <input type="checkbox" name="saudavel" checked={produto.saudavel} onChange={atualizarEstado} className="w-4 h-4 accent-[#3b7a57] rounded-none border-2 border-[#2b5c40]" />
+                Saudável
+              </label>
+            </div>
+          </div>
+
+          <div className="flex border-t-4 border-[#2b5c40] bg-[#fffdf9]">
+            <button type="button" onClick={retornar} className="w-full py-4 text-[#4a3b32] hover:bg-[#f4ebe1] font-black text-xs uppercase tracking-widest transition-all border-r-4 border-[#2b5c40]">
+              Cancelar
+            </button>
+            <button type="submit" disabled={isLoading} className="w-full py-4 text-white bg-[#b33939] hover:bg-[#9c2e2e] font-black text-xs uppercase tracking-widest transition-all flex justify-center items-center">
+              {isLoading ? <ClipLoader color="#ffffff" size={20} /> : (id ? 'Atualizar' : 'Cadastrar')}
+            </button>
+          </div>
+        </form>
       </div>
-
-      {/* Área do Formulário */}
-      <form className="flex flex-col" onSubmit={gerarNovoProduto}>
-        <div className="p-8 flex flex-col gap-6">
-          
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-600 text-sm font-bold">Nome do Produto</label>
-            <input type="text" name="nome" required className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.nome} onChange={atualizarEstado} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-600 text-sm font-bold">Descrição</label>
-            <textarea name="descricao" rows={3} className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none resize-none transition-all" value={produto.descricao} onChange={atualizarEstado} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-600 text-sm font-bold">Preço (R$)</label>
-            <input type="number" name="preco" step="0.01" required className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.preco} onChange={atualizarEstado} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-600 text-sm font-bold">URL da Foto</label>
-            <input type="text" name="foto" className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-red-500 outline-none transition-all" value={produto.foto} onChange={atualizarEstado} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-slate-600 text-sm font-bold">Categoria</label>
-            <select name="categoria" className="border-2 border-slate-200 rounded-xl p-3 w-full bg-white focus:border-red-500 outline-none cursor-pointer" value={produto.categoria?.id || ""} onChange={atualizarEstado}>
-              <option value="" disabled>Selecione uma categoria</option>
-              {categorias.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.descricao}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2 text-slate-600 font-bold text-sm cursor-pointer">
-              <input type="checkbox" name="disponivel" checked={produto.disponivel} onChange={atualizarEstado} className="w-4 h-4 accent-red-500" />
-              Disponível
-            </label>
-            <label className="flex items-center gap-2 text-slate-600 font-bold text-sm cursor-pointer">
-              <input type="checkbox" name="saudavel" checked={produto.saudavel} onChange={atualizarEstado} className="w-4 h-4 accent-red-500" />
-              Saudável
-            </label>
-          </div>
-        </div>
-
-        {/* Rodapé dos botões */}
-        <div className="flex border-t border-slate-100">
-          <button type="button" onClick={retornar} className="w-full py-4 text-slate-500 hover:bg-slate-50 font-bold transition-all border-r border-slate-100">
-            Cancelar
-          </button>
-          <button type="submit" disabled={isLoading} className="w-full py-4 text-red-600 hover:bg-red-50 font-bold transition-all flex justify-center items-center">
-            {isLoading ? <ClipLoader color="#dc2626" size={20} /> : (id ? 'Atualizar' : 'Cadastrar')}
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
-);
+  );
 }
 
-  export default FormProduto;
+export default FormProduto;

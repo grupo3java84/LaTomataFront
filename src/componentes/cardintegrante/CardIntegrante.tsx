@@ -1,54 +1,51 @@
 import { LinkedinLogoIcon, GithubLogoIcon } from '@phosphor-icons/react';
 
 interface MembroProps {
-  membro: {
-    nome: string;
-    papel: string;
-    foto: string;
-    linkedin: string;
-    github: string;
-  };
+    membro: {
+        nome: string;
+        papel: string;
+        foto: string;
+        linkedin: string;
+        github: string;
+    };
 }
 
 export function CardIntegrante({ membro }: MembroProps) {
-  return (
-    <div className="bg-white p-6 rounded-3xl shadow-lg border border-[#FDFBF7] text-center hover:shadow-xl transition-shadow">
+    return (
+        <div className="bg-white p-6 rounded-none border-4 border-[#2b5c40] shadow-[6px_6px_0px_#2b5c40] text-center transition-transform hover:-translate-y-1">
 
-      {/* Foto do Integrante - Fundo em tom cream */}
-      <div className="w-40 h-40 bg-[#FDFBF7] rounded-2xl mx-auto mb-4 overflow-hidden border-4 border-[#fff9ed] aspect-square flex items-center justify-center">
-        <img
-          src={membro.foto}
-          alt={membro.nome}
-          className="w-full h-full object-cover object-center"
-        />
-      </div>
+            <div className="w-36 h-36 bg-[#fffdf9] rounded-none mx-auto mb-5 overflow-hidden border-2 border-[#2b5c40] shadow-[3px_3px_0px_#2b5c40] aspect-square flex items-center justify-center">
+                <img
+                    src={membro.foto}
+                    alt={membro.nome}
+                    className="w-full h-full object-cover object-center"
+                />
+            </div>
 
-      {/* Nome e Cargo - Usando cor Nature para elegância */}
-      <h3 className="font-bold text-xl text-[#2E3A23]">{membro.nome}</h3>
-      <p className="text-[#1F1615] mb-6 text-sm opacity-70">{membro.papel}</p>
+            <h3 className="font-black text-lg text-[#2b5c40] tracking-tight">{membro.nome}</h3>
+            <p className="text-[#4a3b32] mb-6 text-xs font-bold uppercase tracking-wider opacity-80">{membro.papel}</p>
 
-      {/* Ícones de Redes Sociais - Paleta Personalizada */}
-      <div className="flex justify-center gap-4">
-        {/* LinkedIn: Fundo claro com sombra, hover no vermelho da paleta */}
-        <a
-          href={membro.linkedin}
-          target="_blank"
-          rel="noreferrer"
-          className="p-2 bg-[#FDFBF7] shadow-sm border border-gray-100 rounded-full text-[#9e0000] hover:bg-[#9e0000] hover:text-white transition-all hover:shadow-md"
-        >
-          <LinkedinLogoIcon size={20} />
-        </a>
+            <div className="flex justify-center gap-3">
+                <a
+                    href={membro.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 bg-[#fffdf9] border-2 border-[#2b5c40] rounded-none text-[#b33939] hover:bg-[#b33939] hover:text-white transition-all shadow-[2px_2px_0px_#2b5c40] active:translate-x-0.5 active:translate-y-0.5"
+                    title="LinkedIn"
+                >
+                    <LinkedinLogoIcon size={20} weight="bold" />
+                </a>
 
-        {/* GitHub: Fundo claro com sombra, hover no tom Nature da paleta */}
-        <a
-          href={membro.github}
-          target="_blank"
-          rel="noreferrer"
-          className="p-2 bg-[#FDFBF7] shadow-sm border border-gray-100 rounded-full text-[#2E3A23] hover:bg-[#2E3A23] hover:text-white transition-all hover:shadow-md"
-        >
-          <GithubLogoIcon size={20} />
-        </a>
-      </div>
-    </div>
-  );
+                <a
+                    href={membro.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 bg-[#fffdf9] border-2 border-[#2b5c40] rounded-none text-[#2b5c40] hover:bg-[#2b5c40] hover:text-white transition-all shadow-[2px_2px_0px_#2b5c40] active:translate-x-0.5 active:translate-y-0.5"
+                    title="GitHub"
+                >
+                    <GithubLogoIcon size={20} weight="bold" />
+                </a>
+            </div>
+        </div>
+    );
 }

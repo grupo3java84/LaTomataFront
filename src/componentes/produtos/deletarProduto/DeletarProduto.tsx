@@ -8,15 +8,15 @@ import CardProduto from "../cardProduto/CardProduto";
 import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function DeletarProduto() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [produto, setProduto] = useState<Produto | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { usuario, handleLogout } = useContext(AuthContext)
-  const token = usuario.token
+  const { usuario, handleLogout } = useContext(AuthContext);
+  const token = usuario.token;
 
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
 
   async function buscarPorId(idString: string) {
     try {
@@ -24,26 +24,26 @@ function DeletarProduto() {
         setProduto(dados);
       }, {
         headers: { Authorization: token }
-      })
+      });
     } catch (error: any) {
       if (error.toString().includes('401') || error.response?.status === 401) {
-        handleLogout()
+        handleLogout();
       }
     }
   }
 
   useEffect(() => {
     if (token === '') {
-      ToastAlerta('Você precisa estar logado', 'info')
-      navigate('/login')
+      ToastAlerta('Você precisa estar logado', 'info');
+      navigate('/login');
     }
-  }, [token])
+  }, [token]);
 
   useEffect(() => {
     if (id !== undefined) {
-      buscarPorId(id)
+      buscarPorId(id);
     }
-  }, [id])
+  }, [id]);
 
   async function deletarProduto() {
     try {
@@ -63,44 +63,43 @@ function DeletarProduto() {
   }
 
   function retornar() {
-    navigate("/produtos")
+    navigate("/produtos");
   }
 
-
   return (
-    <div className="container flex flex-col items-center mx-auto my-10 px-4">
-      <h1 className="text-4xl text-center my-4 font-bold text-slate-800">
+    <div className="container flex flex-col items-center mx-auto my-12 px-4 font-mono text-[#4a3b32]">
+      <h1 className="text-3xl md:text-4xl text-center my-4 font-black text-[#2b5c40] uppercase tracking-tight">
         Deletar Produto
       </h1>
 
-      <p className="text-base text-slate-600 font-medium text-center mb-6">
+      <p className="text-xs font-bold text-[#4a3b32]/80 uppercase tracking-widest text-center mb-8">
         Você tem certeza de que deseja apagar o produto abaixo?
       </p>
 
       {produto ? (
         <CardProduto produto={produto}>
           <button
-            className="text-slate-700 hover:bg-slate-200 w-full py-3 font-bold transition-all border-r border-slate-100"
+            className="text-[#4a3b32] hover:bg-[#f4ebe1] w-full py-3.5 font-black text-xs uppercase tracking-widest transition-all border-r-4 border-[#2b5c40]"
             onClick={retornar}
             disabled={isLoading}
           >
             Não
           </button>
           <button
-            className="text-slate-100 bg-red-500 hover:bg-red-600 w-full flex items-center justify-center py-3 font-bold transition-all"
+            className="text-white bg-[#b33939] hover:bg-[#9c2e2e] w-full flex items-center justify-center py-3.5 font-black text-xs uppercase tracking-widest transition-all"
             onClick={deletarProduto}
             disabled={isLoading}
           >
             {isLoading ? (
-              <ClipLoader color="#ffffff" size={24} />
+              <ClipLoader color="#ffffff" size={20} />
             ) : (
               <span>Sim</span>
             )}
           </button>
         </CardProduto>
       ) : (
-        <div className="py-20 text-slate-400 font-medium flex flex-col items-center gap-2">
-          <ClipLoader color="#EF4444" size={30} />
+        <div className="py-20 text-[#4a3b32]/60 font-bold uppercase tracking-wider flex flex-col items-center gap-3">
+          <ClipLoader color="#b33939" size={30} />
           <span>Carregando dados do produto...</span>
         </div>
       )}

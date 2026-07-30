@@ -26,10 +26,10 @@ function FormCategoria() {
                 headers: {
                     'Authorization': token
                 }
-            })
+            });
         } catch (error: any) {
             if (error.toString().includes('401')) {
-                handleLogout()
+                handleLogout();
             }
         }
     }
@@ -88,25 +88,18 @@ function FormCategoria() {
         }
     }
 
-
-
-
     return (
-        <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4">
-            {/* Card do Formulário */}
-            <div className="w-full max-w-sm bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
+        <div className="container flex flex-col items-center justify-center mx-auto my-12 px-4 font-mono text-[#4a3b32]">
+            <div className="w-full max-w-sm bg-white rounded-none shadow-[6px_6px_0px_#2b5c40] border-4 border-[#2b5c40] overflow-hidden">
 
-                {/* Faixa Vermelha de Título */}
-                <div className="bg-[#9e0000] py-4 px-8 text-white font-bold text-lg uppercase tracking-widest text-center">
+                <div className="bg-[#b33939] py-4 px-8 text-white font-black text-sm uppercase tracking-widest text-center border-b-4 border-[#2b5c40]">
                     {id ? 'Editar Categoria' : 'Cadastrar Categoria'}
                 </div>
 
-                {/* Área do Formulário */}
                 <form className="flex flex-col" onSubmit={gerarNovaCategoria}>
-                    {/* Área de Input com padding */}
-                    <div className="p-8 flex flex-col gap-6">
+                    <div className="p-8 flex flex-col gap-6 bg-[#fffdf9]">
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="descricao" className="text-slate-600 text-sm font-bold">
+                            <label htmlFor="descricao" className="text-[#4a3b32]/70 text-[10px] font-black uppercase tracking-widest">
                                 Descrição da Categoria
                             </label>
                             <input
@@ -114,7 +107,7 @@ function FormCategoria() {
                                 placeholder="Ex: Frutas, Vegetais..."
                                 name="descricao"
                                 id="descricao"
-                                className="border-2 border-slate-200 rounded-xl p-3 w-full focus:border-[#9e0000] outline-none transition-all"
+                                className="border-2 border-[#2b5c40] bg-[#fffdf9] rounded-none p-3.5 w-full font-bold text-xs focus:outline-none focus:ring-2 focus:ring-[#b33939]"
                                 value={categoria.descricao}
                                 onChange={atualizarEstado}
                                 required
@@ -122,11 +115,10 @@ function FormCategoria() {
                         </div>
                     </div>
 
-                    {/* Área de Botões (Rodapé) */}
-                    <div className="flex border-t border-slate-100">
+                    <div className="flex border-t-4 border-[#2b5c40] bg-[#fffdf9]">
                         <button
                             type="button"
-                            className="w-full py-4 text-slate-500 hover:bg-slate-50 font-bold transition-all border-r border-slate-100"
+                            className="w-full py-4 text-[#4a3b32] hover:bg-[#f4ebe1] font-black text-xs uppercase tracking-widest transition-all border-r-4 border-[#2b5c40]"
                             onClick={retornar}
                         >
                             Cancelar
@@ -134,10 +126,10 @@ function FormCategoria() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 text-[#9e0000] hover:bg-red-50 font-bold transition-all flex justify-center items-center"
+                            className="w-full py-4 text-white bg-[#b33939] hover:bg-[#9c2e2e] font-black text-xs uppercase tracking-widest transition-all flex justify-center items-center"
                         >
                             {isLoading ? (
-                                <ClipLoader color="#9e0000" size={20} />
+                                <ClipLoader color="#ffffff" size={20} />
                             ) : (
                                 id ? 'Atualizar' : 'Cadastrar'
                             )}
@@ -148,4 +140,5 @@ function FormCategoria() {
         </div>
     );
 }
+
 export default FormCategoria;
